@@ -1,31 +1,30 @@
-FROM gcc:latest
+# get baseimage
+FROM ubuntu:latest
 
-RUN apt-get update && apt-get upgrade -y && apt-get autoremove -y
+RUN apt-get update -y
+RUN apt-get upgrade -y
+# reinstall certificates, otherwise git clone command might result in an error
+RUN apt-get install --reinstall ca-certificates -y
 
-# Install necessary dependencies
-RUN apt-get update && \
-    apt-get install -y cmake && \
-    apt-get install -y libboost-all-dev && \
-    apt-get install -y git
+# install developer dependencies
+RUN apt-get install -y git build-essential cmake --no-install-recommends
 
-# Clone and build Crow
-RUN git clone https://github.com/ipkn/crow.git && \
-    cd crow && \
-    mkdir build && \
-    cd build && \
-    cmake .. && \
-    make && \
-    make install
+# install vcpkg package manager
+RUN git clone https://github.com/microsoft/vcpkg
+RUN apt-get install -y curl zip
+RUN vcpkg/bootstrap-vcpkg.sh
 
-# Copy your source code into the container
-COPY main.cpp /app/main.cpp
+# install crow package
+RUN /vcpkg/vcpkg install crow
 
-# Compile your source code
-WORKDIR /app
-RUN g++ -std=c++11 -I/usr/local/include main.cpp -o main -L/usr/local/lib -lboost_system -lboost_thread -lboost_chrono -lpthread
+# copy files from local directory to container
+COPY . /project
 
-# Expose the port your app listens on
-EXPOSE 18080
+# define working directory from container
+WORKDIR /build
 
-# Start your app when the container starts
-CMD ["./main"]
+# compile with CMake 
+RUN bash -c "cmake ../project && cmake --build ."
+
+# run executable (name has to match with CMakeLists.txt file)
+CMD [ "./app" ]
