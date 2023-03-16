@@ -1,0 +1,8 @@
+runtime: custom
+env: flex
+service: default
+entrypoint: ./myapp
+
+manual_scaling:
+  instances: 1
+

@@ -1,18 +1,31 @@
-FROM mcr.microsoft.com/devcontainers/cpp:0-debian-11
+FROM gcc:latest
 
-ARG REINSTALL_CMAKE_VERSION_FROM_SOURCE="none"
+RUN apt-get update && apt-get upgrade -y && apt-get autoremove -y
 
-# Optionally install the cmake for vcpkg
-COPY ./reinstall-cmake.sh /tmp/
+# Install necessary dependencies
+RUN apt-get update && \
+    apt-get install -y cmake && \
+    apt-get install -y libboost-all-dev && \
+    apt-get install -y git
 
-RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
-        chmod +x /tmp/reinstall-cmake.sh && /tmp/reinstall-cmake.sh ${REINSTALL_CMAKE_VERSION_FROM_SOURCE}; \
-    fi \
-    && rm -f /tmp/reinstall-cmake.sh
+# Clone and build Crow
+RUN git clone https://github.com/ipkn/crow.git && \
+    cd crow && \
+    mkdir build && \
+    cd build && \
+    cmake .. && \
+    make && \
+    make install
 
-# [Optional] Uncomment this section to install additional vcpkg ports.
-# RUN su vscode -c "${VCPKG_ROOT}/vcpkg install <your-port-name-here>"
+# Copy your source code into the container
+COPY main.cpp /app/main.cpp
 
-# [Optional] Uncomment this section to install additional packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <libboost-all-dev=1.62.0.1>
+# Compile your source code
+WORKDIR /app
+RUN g++ -std=c++11 -I/usr/local/include main.cpp -o main -L/usr/local/lib -lboost_system -lboost_thread -lboost_chrono -lpthread
+
+# Expose the port your app listens on
+EXPOSE 18080
+
+# Start your app when the container starts
+CMD ["./main"]
