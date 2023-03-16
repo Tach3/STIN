@@ -1,20 +1,15 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include "crow.h"
-using namespace std;
 //#include "crow_all.h"
 
 int main()
 {
-    crow::SimpleApp app;
+    crow::SimpleApp app; //define your crow application
 
     //define your endpoint at the root directory
-    CROW_ROUTE(app, "/")
-        ([]() {
-        return "<div><h1>Hello peter</h1></div>";
-            });
-    char* port = getenv("PORT");
-    uint16_t iPort = static_cast<uint16_t>(port != NULL ? stoi(port) : 18080);
-    cout << "PORT = " << iPort << endl;
-    app.port(iPort).multithreaded().run();
+    CROW_ROUTE(app, "/")([]() {
+        return "Hello World";
+        });
 
+    //set the port, set the app to run on multiple threads, and run the app
+    app.port(18080).multithreaded().run();
 }

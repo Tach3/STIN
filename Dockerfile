@@ -1,18 +1,30 @@
-FROM mcr.microsoft.com/devcontainers/cpp:0-debian-11
+# get baseimage
+FROM ubuntu:latest
 
-ARG REINSTALL_CMAKE_VERSION_FROM_SOURCE="none"
+RUN apt-get update -y
+RUN apt-get upgrade -y
+# reinstall certificates, otherwise git clone command might result in an error
+RUN apt-get install --reinstall ca-certificates -y
 
-# Optionally install the cmake for vcpkg
-COPY ./reinstall-cmake.sh /tmp/
+# install developer dependencies
+RUN apt-get install -y git build-essential cmake --no-install-recommends
 
-RUN if [ "${REINSTALL_CMAKE_VERSION_FROM_SOURCE}" != "none" ]; then \
-        chmod +x /tmp/reinstall-cmake.sh && /tmp/reinstall-cmake.sh ${REINSTALL_CMAKE_VERSION_FROM_SOURCE}; \
-    fi \
-    && rm -f /tmp/reinstall-cmake.sh
+# install vcpkg package manager
+RUN git clone https://github.com/microsoft/vcpkg
+RUN apt-get install -y curl zip
+RUN vcpkg/bootstrap-vcpkg.sh
 
-# [Optional] Uncomment this section to install additional vcpkg ports.
-# RUN su vscode -c "${VCPKG_ROOT}/vcpkg install <your-port-name-here>"
+# install crow package
+RUN /vcpkg/vcpkg install crow
 
-# [Optional] Uncomment this section to install additional packages.
-# RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
-#     && apt-get -y install --no-install-recommends <libboost-all-dev=1.62.0.1>
+# copy files from local directory to container
+COPY . /project
+
+# define working directory from container
+WORKDIR /build
+
+# compile with CMake 
+RUN bash -c "cmake ../project && cmake --build ."
+
+# run executable (name has to match with CMakeLists.txt file)
+CMD [ "./app" ]
