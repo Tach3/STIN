@@ -20,18 +20,9 @@ json get_user_info(const string& username) {
         if (user["username"] == username) {
             // Found the user, print the account number and funds
             return json{ {"account_number", user["account_number"]},{"funds", user["funds"]} };
-           //std::cout << "Account number: " << user["account_number"] << std::endl;
-            //std::cout << "Funds: " << user["funds"] << std::endl;
 
         }
     }
-  /*  for (const auto& user : data) {
-        if (user["username"] == username) {
-            // Return account number and funds as JSON object
-            return json{ {"account_number", user["account_number"]},
-                        {"funds", user["funds"]} };
-        }
-    }*/
 
     // If user is not found, return empty JSON object
     return json{};
