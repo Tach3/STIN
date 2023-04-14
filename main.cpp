@@ -2,6 +2,8 @@
 #include <iostream>
 #include "json.hpp"
 #include <fstream>
+#include "myFunctions.h"
+
 using namespace std;
 using json = nlohmann::json;
 
@@ -10,28 +12,6 @@ struct Credentials {
     string password;
 };
 
-
-json get_user_info(const string& email) {
-    ifstream json_file("data.json");
-    json data;
-    json_file >> data;
-
-    // Search for the user with email "peter.spurny@tul.cz"
-    for (auto& user : data) {
-        if (user["email"] == email) {
-            // Found the user, print the account number and funds
-            return json{ {"account_number", user["account_number"]},{"funds", user["funds"]} };
-
-        }
-    }
-
-    // If user is not found, return empty JSON object
-    return json{};
-}
-
-bool verify_login(const string& email, const string& password) {
-    return true;
-}
 
 int main()
 {
@@ -59,16 +39,19 @@ int main()
         // Get email and password from request body
         std::string email = req_body["email"].get<std::string>();
         std::string password = req_body["password"].get<std::string>();
+        ifstream json_file("data.json");
+        json data;
+        json_file >> data;
 
         // Verify login credentials
-        bool is_valid_login = verify_login(email, password);
+        bool is_valid_login = verify_login(email, password, data);
 
         // Create JSON response data
         json response_data;
         if (is_valid_login) {
             response_data["success"] = true;
             response_data["message"] = "Login succeeded";
-            response_data["user_info"] = get_user_info(email); // Custom function to get user info
+            response_data["user_info"] = get_user_info(email, data); // Custom function to get user info
         }
         else {
             response_data["success"] = false;
