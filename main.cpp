@@ -2,7 +2,12 @@
 #include <iostream>
 #include "json.hpp"
 #include <fstream>
+#include <cstdio>
+#include <cstdlib>
+#include <ctime>
 #include "myFunctions.h"
+#include <curl\curl.h>
+
 
 using namespace std;
 using json = nlohmann::json;
@@ -11,6 +16,14 @@ struct Credentials {
     string email;
     string password;
 };
+
+int generateRandomNumber() {
+    srand(time(NULL));  // Seed the random number generator with the current time
+    int random_number = rand() % 9000 + 1000;  // Generate a random number between 1000 and 9999
+    return random_number;
+}
+
+
 
 
 int main()
@@ -69,9 +82,11 @@ int main()
 
     // Define a welcome page to redirect the user to after a successful login
     CROW_ROUTE(app, "/welcome")([]() {
+        //sendEmail("hikawa.renko99@gmail.com");
+        sendPythonEmail("peter.spurny@outlook.com", to_string(generateRandomNumber()));
         return "Welcome!";
         });
-    
+
 
     app.port(18080).multithreaded().run();
 }
