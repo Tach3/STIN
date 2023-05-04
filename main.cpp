@@ -20,8 +20,8 @@ struct Credentials {
 #define FROM    "peter.spurny@tul.cz"
 #define TO		"peter.spurny@outlook.com"
 #define USERNAME "peter.spurny"
-#define PASSWORD ""
-#define MAILTO "peter.spurny@outlook.com"
+#define PASSWORD "Hurikanps99"
+//#define MAILTO "peter.spurny@outlook.com"
 #define MAILFROM "peter.spurny@tul.cz"
 #define SMTP "smtp.tul.cz:587"
 
@@ -62,7 +62,7 @@ void sendEmail(const std::string& recipient, int& code)
     curl_easy_setopt(curl, CURLOPT_MAIL_FROM, MAILFROM);
 
     struct curl_slist* rcpt = NULL;
-    rcpt = curl_slist_append(rcpt, MAILTO);
+    rcpt = curl_slist_append(rcpt, recipient.c_str());
     curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, rcpt);
     string message = "Date: Mon, 29 Nov 2010 21:54:29 +1100\r\n"
         "To: " + recipient + "\r\n" 
@@ -115,8 +115,8 @@ int main()
         json req_body = json::parse(req.body);
 
         // Get email and password from request body
-        std::string email = req_body["email"].get<std::string>();
-        std::string password = req_body["password"].get<std::string>();
+        string email = req_body["email"].get<std::string>();
+        string password = req_body["password"].get<std::string>();
         ifstream json_file("data.json");
         json data;
         json_file >> data;
@@ -129,7 +129,7 @@ int main()
         if (is_valid_login) {
             response_data["success"] = true;
             response_data["message"] = "Login succeeded";
-            response_data["user_info"] = get_user_info(email, data); // Custom function to get user info
+            //response_data["user_info"] = get_user_info(email, data); // Custom function to get user info
         }
         else {
             response_data["success"] = false;
@@ -139,7 +139,7 @@ int main()
         // Return JSON response
 
         crow::response res{ response_data.dump() };
-        res.set_header("Access-Control-Allow-Origin", "*"); // Set the header here
+        //res.set_header("Access-Control-Allow-Origin", "*"); // Set the header here
         return res;
             });
     
@@ -151,6 +151,15 @@ int main()
         sendEmail("peter.spurny@outlook.com", code);
         //sendPythonEmail("peter.spurny@outlook.com", to_string(generateRandomNumber()));
         return "Welcome!";
+        });
+
+    CROW_ROUTE(app, "/2fa").methods("POST"_method)
+        ([](const crow::request& req) {
+        int code = generateRandomNumber();
+        json req_body = json::parse(req.body);
+        string mail = req_body["email"].get<string>();
+        sendEmail(mail, code);
+        return "Welcome";
         });
 
 
