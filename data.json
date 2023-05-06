@@ -1,14 +1,8 @@
 [
 {
-  "email": "peter.spurny@tul.cz",
-  "password": "Heslo",
-  "account_number": 1776,
-  "funds": 20
+  "email": "peter.spurny@tul.cz"
 },
 {
-  "email": "peterspurnysemestralka@gmail.com",
-  "password": "heslo123",
-  "account_number": 885,
-  "funds": 44
+  "email": "peterspurnysemestralka@gmail.com"
 }
 ]
