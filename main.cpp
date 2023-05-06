@@ -53,8 +53,8 @@ void sendEmail(const std::string& recipient, int& code, string username, string 
 
     }
 
-    curl_easy_setopt(curl, CURLOPT_USERNAME, username);
-    curl_easy_setopt(curl, CURLOPT_PASSWORD, password);
+    curl_easy_setopt(curl, CURLOPT_USERNAME, username.c_str());
+    curl_easy_setopt(curl, CURLOPT_PASSWORD, password.c_str());
     curl_easy_setopt(curl, CURLOPT_URL, SMTP);
     curl_easy_setopt(curl, CURLOPT_MAIL_FROM, MAILFROM);
 
@@ -62,11 +62,11 @@ void sendEmail(const std::string& recipient, int& code, string username, string 
     rcpt = curl_slist_append(rcpt, recipient.c_str());
     curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, rcpt);
     string message = "Date: Mon, 29 Nov 2010 21:54:29 +1100\r\n"
-        "To: " + recipient + "\r\n" 
-        "From: " MAILFROM "\r\n" 
+        "To: " + recipient + "\r\n"
+        "From: " MAILFROM "\r\n"
         "Subject: Verification Code\r\n"
         "\r\n"
-        "Code: " + to_string(code) + "\r\n" 
+        "Code: " + to_string(code) + "\r\n"
         "This is a test email.\r\n";
     ReadData data(message.data());
     curl_easy_setopt(curl, CURLOPT_READDATA, &data);
@@ -113,7 +113,7 @@ int main()
     CROW_ROUTE(app, "/login")
         .methods("POST"_method)
         ([](const crow::request& req) {
-        
+
         // Parse JSON data from request body
 
         json req_body = json::parse(req.body);
@@ -145,7 +145,7 @@ int main()
         crow::response res{ response_data.dump() };
         return res;
             });
-    
+
 
 
     // Define a welcome page to redirect the user to after a successful login
@@ -163,7 +163,7 @@ int main()
         string mail = req_body["email"].get<string>();
         sendEmail(mail, code, username, password);
         return "Welcome";
-        });
+            });
 
 
     app.port(18080).multithreaded().run();
