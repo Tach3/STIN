@@ -32,12 +32,22 @@ int main()
     const std::string username = config.get<std::string>("username");
     const std::string password = config.get<std::string>("password");
 
-    crow::App<crow::CORSHandler> app;
+    crow::App<crow::CookieParser, crow::CORSHandler> app;
     //CORS handler
+    app.get_middleware<crow::CookieParser>();
     auto& cors = app.get_middleware<crow::CORSHandler>();
+
     cors
         .global()
-        .methods("POST"_method, "GET"_method)
+        .methods("POST"_method, "GET"_method, "OPTIONS"_method)
+        .prefix("/2faCode")
+        .origin("http://localhost:8000")
+        .allow_credentials()
+        .headers("*","content-type")
+        .prefix("/dashboard")
+        .origin("http://localhost:8000")
+        .allow_credentials()
+        .headers("*", "content-type")
         .prefix("/cors")
         .origin("*")
         .prefix("/nocors")
@@ -75,7 +85,7 @@ int main()
 
         // Return JSON response
 
-        crow::response res{ response_data.dump() };
+        crow::response res{ response_data.dump() };        
         return res;
             });
 
@@ -110,6 +120,10 @@ int main()
         if (isVerified) {
             response["success"] = true;
             response["message"] = "Login succeeded";
+            auto& ctx = app.get_context<crow::CookieParser>(req);
+
+            // set a cookie
+            ctx.set_cookie("session", "true");
         }
         else {
             response["success"] = false;
@@ -118,6 +132,19 @@ int main()
         crow::response res{ response.dump() };
         return res;
         });
+
+    CROW_ROUTE(app, "/dashboard").methods("GET"_method)
+        ([&](const crow::request& req) {
+        // Parse cookies using the CookieParser middleware
+        auto& ctx = app.get_context<crow::CookieParser>(req);
+        // Check if the "key" cookie exists
+        if (!ctx.get_cookie("session").empty()) {
+            return crow::response(200);
+        }
+        else {
+            return crow::response(302);
+        }
+            });
 
 
     app.port(18080).multithreaded().run();
