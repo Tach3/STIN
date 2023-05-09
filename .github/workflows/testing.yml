@@ -1,0 +1,25 @@
+name: C++ Unit Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: windows-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Install Visual Studio 2019 Build Tools
+      uses: microsoft/setup-msbuild@v1.0.2
+
+    - name: Build solution
+      run: msbuild crow.sln /p:Configuration=Debug /p:Platform="x64"
+
+    - name: Run tests and generate coverage report
+      run: |
+        vstest.console.exe crowTest.dll /Logger:trx;LogFileName=testresults.trx /Enablecodecoverage /InIsolation
+        CodeCoverage.exe analyze /output:coverage.xml testresults.trx
