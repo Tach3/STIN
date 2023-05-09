@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.8)
 project(project)
 
 # full path from root directory
-include(/vcpkg/scripts/buildsystems/vcpkg.cmake)
+include(C:/Users/peter/VCPKG/vcpkg/scripts/buildsystems/vcpkg.cmake)
 
 find_package(Crow CONFIG REQUIRED)
 

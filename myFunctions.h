@@ -2,13 +2,96 @@
 #ifndef JSON_HPP
 #define JSON_HPP
 
-#include "../crow/json.hpp"
+#include <nlohmann/json.hpp>
 
 #endif /* JSON_HPP */
+#ifndef CURL_H
+#define CURL_H
+
+#include "curl\curl.h"
+
+#endif /* CURL_H */
+
+#include <fstream>
+
 using namespace std;
 using json = nlohmann::json;
 
+#define MAILFROM "peter.spurny@tul.cz"
+#define SMTP "smtp.tul.cz:587"
 
+json parseJson(std::string file) {
+    ifstream json_file(file);
+    json data;
+    json_file >> data;
+    return data;
+}
+
+struct ReadData
+{
+    explicit ReadData(const char* str)
+    {
+        source = str;
+        size = strlen(str);
+    }
+
+    const char* source;
+    size_t size;
+};
+
+size_t read_function(char* buffer, size_t size, size_t nitems, ReadData* data)
+{
+    size_t len = size * nitems;
+    if (len > data->size) { len = data->size; }
+    memcpy(buffer, data->source, len);
+    data->source += len;
+    data->size -= len;
+    return len;
+}
+
+void sendEmail(const std::string& recipient, int& code, std::string username, std::string password)
+{
+    CURL* curl = curl_easy_init();
+    if (!curl)
+    {
+        fprintf(stderr, "curl_easy_init failed\n");
+
+    }
+
+    curl_easy_setopt(curl, CURLOPT_USERNAME, username.c_str());
+    curl_easy_setopt(curl, CURLOPT_PASSWORD, password.c_str());
+    curl_easy_setopt(curl, CURLOPT_URL, SMTP);
+    curl_easy_setopt(curl, CURLOPT_MAIL_FROM, MAILFROM);
+
+    struct curl_slist* rcpt = NULL;
+    rcpt = curl_slist_append(rcpt, recipient.c_str());
+    curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, rcpt);
+    string message = "Date: Mon, 29 Nov 2010 21:54:29 +1100\r\n"
+        "To: " + recipient + "\r\n"
+        "From: " MAILFROM "\r\n"
+        "Subject: Verification Code\r\n"
+        "\r\n"
+        "Code: " + to_string(code) + "\r\n"
+        "This is a test email.\r\n";
+    ReadData data(message.data());
+    curl_easy_setopt(curl, CURLOPT_READDATA, &data);
+    curl_easy_setopt(curl, CURLOPT_READFUNCTION, read_function);
+
+    curl_easy_setopt(curl, CURLOPT_VERBOSE, 1);
+    curl_easy_setopt(curl, CURLOPT_UPLOAD, 1);
+    curl_easy_setopt(curl, CURLOPT_USE_SSL, CURLUSESSL_ALL);
+
+    // If your server doesn't have a proper SSL certificate:
+    curl_easy_setopt(curl, CURLOPT_SSL_VERIFYPEER, 0);
+
+    CURLcode res = curl_easy_perform(curl);
+    if (res != CURLE_OK)
+    {
+        fprintf(stderr, "curl_easy_perform() failed: %s\n",
+            curl_easy_strerror(res));
+        curl_easy_cleanup(curl);
+    }
+}
 
 bool isPokus(int& param) {
 	if (param > 3) {
@@ -37,7 +120,7 @@ json get_user_info(const string& email, json& data) {
 bool verify_login(const string& email, const string& password, json& data) {
     for (auto& user : data) {
         if (user["email"] == email && user["password"] == password) {
-            // Found the user, print the account number and funds
+            // Found the user, return true
             return true;
 
         }
@@ -45,48 +128,31 @@ bool verify_login(const string& email, const string& password, json& data) {
     return false;
 }
 
-//ghetto solution
-void sendPythonEmail(const std::string& recipient, const std::string& code)
-{
-    string py_code = "import smtplib\n\n"
-        "TO = '" + recipient + "'\n"
-        "MSG = '" + code + "'\n\n"
-        "s = smtplib.SMTP('smtp.tul.cz',587)\n"
-        "s.ehlo()\n"
-        "s.starttls()\n"
-        "s.login('login','passwd')\n"
-        "try:\n"
-        "    s.sendmail('peter.spurny@tul.cz', TO, MSG)\n"
-        "except:\n"
-        "    print ('failed')\n";
+void insertCode(const string& email, json& data, int& code) {
+    for (auto& user : data) {
+        if (user["email"] == email) {
+            // Found the user, insert code
+            user["code"] = to_string(code);
+            break;
+        }
+    }
+    ofstream o("users.json");
+    o << data.dump() << endl;
+}
 
-    // create a new file with the Python code
-    ofstream file("send_email.py");
-    if (file.is_open()) {
-        file << py_code;
-        file.close();
-        cout << "File created successfully." << endl;
+bool verifyCode(const string& email, json& data, string& code) {
+    for (auto& user : data) {
+        if (user["email"] == email) {
+            // Found the user, verify code
+            if (user["code"] == code) {
+                return true;
+            }
+            else {
+                return false;
+            }
+        }
     }
-    else {
-        cout << "Unable to create file." << endl;
-    }
-
-    // execute the Python file using the system function
-    int result = system("python send_email.py");
-    if (result == 0) {
-        cout << "Python script executed successfully." << endl;
-    }
-    else {
-        cout << "Python script execution failed." << endl;
-    }
-    
-    if (remove("send_email.py") != 0) {
-        cout << "Unable to delete the file." << endl;
-    }
-    else {
-        cout << "File deleted successfully." << endl;
-    }
-    
+    return false;
 }
 
 int generateRandomNumber() {
