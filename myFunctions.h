@@ -2,7 +2,7 @@
 #ifndef JSON_HPP
 #define JSON_HPP
 
-#include "json.hpp"
+#include <nlohmann/json.hpp>
 
 #endif /* JSON_HPP */
 #ifndef CURL_H
@@ -11,6 +11,8 @@
 #include "curl\curl.h"
 
 #endif /* CURL_H */
+
+#include <fstream>
 
 using namespace std;
 using json = nlohmann::json;

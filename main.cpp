@@ -1,7 +1,6 @@
 #include "crow_all.h"
 #include <iostream>
 #include "json.hpp"
-#include <fstream>
 #include <cstdio>
 #include <cstdlib>
 #include <ctime>
@@ -15,8 +14,8 @@ using namespace std;
 using json = nlohmann::json;
 
 struct Credentials {
-    std::string email;
-    std::string password;
+   const string username;
+   const string password;
 };
 
 #define MAILFROM "peter.spurny@tul.cz"
@@ -25,12 +24,23 @@ struct Credentials {
 
 int main()
 {
-    boost::property_tree::ptree config;
-    boost::property_tree::ini_parser::read_ini("config.ini", config);
+    const Credentials credentials = []() -> Credentials {
+        try {
+            boost::property_tree::ptree config;
+            boost::property_tree::ini_parser::read_ini("config.ini", config);
 
-    // Get the username and password from the configuration file
-    const std::string username = config.get<std::string>("username");
-    const std::string password = config.get<std::string>("password");
+            // Get the username and password from the configuration file
+            const std::string username = config.get<std::string>("username");
+            const std::string password = config.get<std::string>("password");
+            return { username, password };
+        }
+        catch (const boost::property_tree::ini_parser_error& ex) {
+            std::cerr << "Failed to read the config file: " << ex.what() << std::endl;
+            // Handle the exception here
+            system("pause");
+            exit(1);
+        }
+    }();
 
     crow::App<crow::CookieParser, crow::CORSHandler> app;
     //CORS handler
@@ -93,8 +103,8 @@ int main()
 
     // Define a welcome page to redirect the user to after a successful login
     CROW_ROUTE(app, "/welcome")([&]() {
-        int code = generateRandomNumber();
-        sendEmail("peter.spurny@outlook.com", code, username, password);
+        //int code = generateRandomNumber();
+        //sendEmail("peter.spurny@outlook.com", code, username, password);
         //sendPythonEmail("peter.spurny@outlook.com", to_string(generateRandomNumber()));
         return "Welcome!";
         });
@@ -104,7 +114,7 @@ int main()
         int code = generateRandomNumber();
         json req_body = json::parse(req.body);
         std::string mail = req_body["email"].get<std::string>();
-        sendEmail(mail, code, username, password);
+        sendEmail(mail, code, credentials.username, credentials.password);
         json data = parseJson(USERSJ);
         insertCode(mail, data, code);
         return "2fa";
@@ -148,4 +158,5 @@ int main()
 
 
     app.port(18080).multithreaded().run();
+
 }
