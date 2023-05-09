@@ -16,10 +16,7 @@ jobs:
     - name: Install Visual Studio 2019 Build Tools
       uses: microsoft/setup-msbuild@v1.0.2
       
-    - name: run-vcpkg
-      uses: lukka/run-vcpkg@v11.1
-    
     - name: Install Boost C++ Libraries
       run: |
-        vcpkg install boost:x64-windows
-
+        choco install boost-msvc-14.2
+        setx /M BOOST_ROOT "C:\local\boost_1_76_0"
