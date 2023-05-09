@@ -1,39 +1,30 @@
-name: C++ Unit Tests
+name: C++ Build
 
-on:
-  push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+on: [push]
 
 jobs:
-  build-and-test:
-    runs-on: windows-latest
-
+  build:
+    runs-on: ubuntu-latest
+    
     steps:
-    - uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-    - name: Install Visual Studio 2019 Build Tools
-      uses: microsoft/setup-msbuild@v1.0.2
-
-    - name: Install vcpkg
+    - name: Install Vcpkg
       run: |
         git clone https://github.com/Microsoft/vcpkg.git
-        cd vcpkg
-        .\bootstrap-vcpkg.bat
-        setx /M VCPKG_ROOT "$(pwd)"
-        setx /M PATH "%PATH%;$(pwd)\installed\x64-windows\bin"
-        
-    - name: Install Boost C++ Libraries
-      run: |
-        vcpkg install boost:x64-windows
-        setx /M BOOST_ROOT "$(vcpkg --triplet x64-windows --print-root)/installed/x64-windows"
-        
-    - name: Install CURL Library
-      run: |
-        vcpkg install curl:x64-windows
-        setx /M CURL_DIR "$(vcpkg --triplet x64-windows --print-root)/installed/x64-windows"
+        ./vcpkg/bootstrap-vcpkg.sh
+        ./vcpkg/vcpkg install boost
+        ./vcpkg/vcpkg install curl
 
-    - name: Build solution
+    - name: Set up environment
       run: |
-        msbuild crow.sln /t:Rebuild /p:Configuration=Debug /p:Platform=x64
+        echo "::set-env name=VCPKG_ROOT::${{ github.workspace }}/vcpkg"
+        echo "::add-path::${{ github.workspace }}/vcpkg/installed/x64-linux/bin"
+
+    - name: Build
+      run: |
+        mkdir build
+        cd build
+        cmake .. -DCMAKE_TOOLCHAIN_FILE=$VCPKG_ROOT/scripts/buildsystems/vcpkg.cmake
+        cmake --build . --config Debug
