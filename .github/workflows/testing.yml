@@ -20,3 +20,17 @@ jobs:
       run: |
         choco install boost-msvc-14.2
         setx /M BOOST_ROOT "C:\local\boost_1_76_0"
+
+    - name: Install CURL Library
+      run: |
+        choco install curl
+        setx /M CURL_DIR "C:\tools\curl-7.78.0-win64-mingw\bin"
+
+    - name: Install nlohmann/json Library
+      run: |
+        git clone https://github.com/nlohmann/json.git
+        setx /M JSON_DIR "$(pwd)/json"
+
+    - name: Build solution
+      run: |
+        msbuild crow.sln /t:Rebuild /p:Configuration=Debug /p:Platform=x64
