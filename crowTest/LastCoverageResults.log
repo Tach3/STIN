@@ -1,0 +1,125 @@
+[2023-05-07 22:00:32] [info] Start Program:
+Path:"C:\\Program Files (x86)\\Microsoft Visual Studio\\2019\\BuildTools\\Common7\\IDE\\CommonExtensions\\Microsoft\\TestWindow\\vstest.console.exe"
+Arguments:x64/Debug/crowTest.dll 
+Working directory: not set.
+Modules: Selected: * Excluded: 
+Sources: Selected: crow Excluded: 
+Log Level: Normal
+Cover Children: 0
+Aggregate by file: 1
+Continue after C++ exception: 0
+Optimized build support: 0
+Export: html 
+Input coverage: 
+Unified diff: 
+Excluded line regular expressions: 
+Substitute pdb source paths: 
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\CommonExtensions\Microsoft\TestWindow\vstest.console.exe is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Windows\System32\ntdll.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\ntdll.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\System32\wow64.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\System32\wow64win.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\System32\wow64cpu.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\mscoree.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\kernel32.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\KernelBase.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\advapi32.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\msvcrt.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\sechost.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\rpcrt4.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\Microsoft.NET\Framework\v4.0.30319\mscoreei.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\shlwapi.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\kernel.appcore.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\version.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\Microsoft.NET\Framework\v4.0.30319\clr.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\vcruntime140_clr0400.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\user32.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\ucrtbase_clr0400.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\win32u.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\gdi32.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\gdi32full.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\msvcp_win.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\ucrtbase.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\imm32.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\combase.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\assembly\NativeImages_v4.0.30319_32\mscorlib\b8b4f2e4a119ba27f271d768ced7e470\mscorlib.ni.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Windows\assembly\NativeImages_v4.0.30319_32\mscorlib\b8b4f2e4a119ba27f271d768ced7e470\mscorlib.ni.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\ole32.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\combase.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\bcryptprimitives.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\Microsoft.NET\Framework\v4.0.30319\clrjit.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\oleaut32.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\cryptsp.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\rsaenh.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\bcrypt.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\cryptbase.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\vstest.console.exe is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\vstest.console.exe is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\vstest.console.exe is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\vstest.console.exe is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\vstest.console.exe is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\vstest.console.exe is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\vstest.console.exe is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\vstest.console.exe is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\urlmon.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\iertutil.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\srvcli.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\netutils.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\SHCore.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\sspicli.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\windows.storage.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\wldp.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\propsys.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\virtdisk.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\fltLib.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.TestPlatform.CoreUtilities.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.TestPlatform.CoreUtilities.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.TestPlatform.CoreUtilities.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.TestPlatform.CoreUtilities.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Windows\assembly\NativeImages_v4.0.30319_32\System\36798a13542b98319621b3f4a2db175a\System.ni.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Windows\assembly\NativeImages_v4.0.30319_32\System\36798a13542b98319621b3f4a2db175a\System.ni.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.VisualStudio.TestPlatform.ObjectModel.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.VisualStudio.TestPlatform.Client.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.VisualStudio.TestPlatform.Client.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.VisualStudio.TestPlatform.Client.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.VisualStudio.TestPlatform.Client.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.VisualStudio.TestPlatform.Common.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.VisualStudio.TestPlatform.Common.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.VisualStudio.TestPlatform.Common.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.VisualStudio.TestPlatform.Common.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Windows\assembly\NativeImages_v4.0.30319_32\System.Core\85900d22ffacf55c0ab469d5650166ad\System.Core.ni.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Windows\assembly\NativeImages_v4.0.30319_32\System.Core\85900d22ffacf55c0ab469d5650166ad\System.Core.ni.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.TestPlatform.Utilities.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.TestPlatform.Utilities.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.TestPlatform.Utilities.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.TestPlatform.Utilities.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.TestPlatform.PlatformAbstractions.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.TestPlatform.PlatformAbstractions.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.TestPlatform.PlatformAbstractions.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.TestPlatform.PlatformAbstractions.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Windows\assembly\NativeImages_v4.0.30319_32\System.Xml\c075a1598172d8e908ad9b8b1524fda5\System.Xml.ni.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Windows\assembly\NativeImages_v4.0.30319_32\System.Xml\c075a1598172d8e908ad9b8b1524fda5\System.Xml.ni.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\NuGet.Frameworks.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\NuGet.Frameworks.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\NuGet.Frameworks.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\NuGet.Frameworks.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\shell32.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\SysWOW64\profapi.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] Module: C:\Windows\assembly\NativeImages_v4.0.30319_32\System.Configuration\c6c418a741ffca97232fe30551c4396b\System.Configuration.ni.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Windows\assembly\NativeImages_v4.0.30319_32\System.Configuration\c6c418a741ffca97232fe30551c4396b\System.Configuration.ni.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.Extensions.FileSystemGlobbing.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.Extensions.FileSystemGlobbing.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] Module: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.Extensions.FileSystemGlobbing.dll is selected because it matches selected pattern: *
+[2023-05-07 22:00:32] [info] C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\Common7\IDE\Extensions\TestPlatform\Microsoft.Extensions.FileSystemGlobbing.dll is skipped as it is a managed module.
+[2023-05-07 22:00:32] [info] ----------------------------------------------------
+[2023-05-07 22:00:32] [info] Coverage generated in Folder C:\Users\peter\source\repos\crowTest\CoverageReport-2023-05-07-22h00m32s
+[2023-05-07 22:00:32] [info] ----------------------------------------------------
+[2023-05-07 22:00:32] [info] The code coverage report is not what you expect? See the FAQ https://github.com/OpenCppCoverage/OpenCppCoverage/wiki/FAQ.
+[2023-05-07 22:00:32] [error] Your program stop with error code: 1
+[2023-05-07 22:00:32] [warning] No modules were selected. Please check the values of --modules and --excluded_modules.
+You can try to remove all --modules and --excluded_modules and use --modules=C:\Windows\SysWOW64 instead.
+For additional help, see https://github.com/OpenCppCoverage/OpenCppCoverage/wiki/FAQ#coverage-report-is-empty.
