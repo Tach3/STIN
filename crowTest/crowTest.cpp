@@ -127,7 +127,7 @@ namespace crowTest
         TEST_METHOD(InsertsVerificationCode)
         {
             // Set up test data
-            std::string email = "test@example.com";
+            std::string email = "johndoe@example.com";
             int code = 12345;
             json data = R"([
                 {
@@ -154,17 +154,52 @@ namespace crowTest
             f.close();
 
             // Read the file back in and verify its contents
-            std::ifstream infile(filename);
-            std::stringstream buffer;
-            buffer << infile.rdbuf();
-            std::string file_contents = buffer.str();
-            infile.close();
+            bool result = verifyCode(email, data, to_string(code));
 
-            Assert::AreEqual(data.dump(), file_contents);
+            Assert::IsTrue(result);
 
             // Clean up the temporary file
             std::remove(filename.c_str());
         }
+
+        TEST_METHOD(VerificationCodeWrongEmail)
+        {
+            // Set up test data
+            std::string email = "wrongEmail@example.com";
+            int code = 12345;
+            json data = R"([
+                {
+                    "name": "John Doe",
+                    "email": "johndoe@example.com",
+                    "code": "54321"
+                },
+                {
+                    "name": "Jane Doe",
+                    "email": "janedoe@example.com",
+                    "code": "67890"
+                }
+            ])"_json;
+
+            // Create a temporary file
+            std::string filename = "test.json";
+            std::ofstream f(filename);
+
+            // Call the function being tested
+            insertCode(email, data, code);
+
+            // Write the updated data to the file
+            f << data.dump();
+            f.close();
+
+            // Read the file back in and verify its contents
+            bool result = verifyCode(email, data, to_string(code));
+
+            Assert::IsFalse(result);
+
+            // Clean up the temporary file
+            std::remove(filename.c_str());
+        }
+
         TEST_METHOD(VerifiesCorrectCode)
         {
             // Set up test data

@@ -38,6 +38,9 @@ jobs:
       id: run_msbuild
       working-directory: ./crow
       run: msbuild crow.sln
+      env:
+          USERNAME: ${{ secrets.USRNM }}
+          PASSWORD: ${{ secrets.PSSWD }}
       
     - name: Run VSTest
       id: run_vstest

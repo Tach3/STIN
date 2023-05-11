@@ -2,12 +2,15 @@
 FROM ubuntu:latest
 
 # Install required packages
-RUN apt-get update && apt-get install -y \
+RUN apt-get update
+RUN apt-get install -y \
     g++ \
-    cmake \
     libboost-all-dev \
-    libssl-dev \
-    libcrypto++-dev
+    libcurl4-openssl-dev \
+    build-essential \
+    libasio-dev
+
+
 
 # Set working directory
 WORKDIR /app
@@ -15,12 +18,13 @@ WORKDIR /app
 # Copy application files to the container
 COPY . .
 
+CD crow
+
 # Build the application
-RUN cmake .
-RUN make
+RUN g++ -I/usr/include/curl/ main.cpp -o main -lcurl
 
 # Set the default command to run the application
-CMD ["./app"]
+CMD ["./main"]
 
 # Expose the port that the application is running on
 EXPOSE 18080

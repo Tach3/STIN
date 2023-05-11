@@ -6,8 +6,8 @@
 using namespace std;
 using json = nlohmann::json;
 
-#define MAILFROM "peter.spurny@tul.cz"
-#define SMTP "smtp.tul.cz:587"
+#define MAILFROM "peterspurnysemestralka@gmail.com"
+#define SMTP "smtp.gmail.com:587"
 #define USERSJ "users.json"
 
 json parseJson(std::string file) {

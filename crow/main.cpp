@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include "crow_all.h"
 #include <iostream>
 #include "json.hpp"
@@ -23,22 +24,26 @@ int main()
 {
         const Credentials credentials = []() -> Credentials {
             try {
-                boost::property_tree::ptree config;
-                boost::property_tree::ini_parser::read_ini("config.ini", config);
+                //boost::property_tree::ptree config;
+                //boost::property_tree::ini_parser::read_ini("config.ini", config);
 
                 // Get the username and password from the configuration file
-                const std::string username = config.get<std::string>("username");
-                const std::string password = config.get<std::string>("password");
+                //const std::string username = config.get<std::string>("username");
+                //const std::string password = config.get<std::string>("password");
+                const char* user = std::getenv("USRNM");
+                const char* pass = std::getenv("PSSWD");
+                std::string username = user ? std::string(user) : "";
+                std::string password = pass ? std::string(pass) : "";
                 return { username, password };
             }
-            catch (const boost::property_tree::ini_parser_error& ex) {
-                std::cerr << "Failed to read the config file: " << ex.what() << std::endl;
+            catch (std::exception& ex) {
+                std::cerr << "Failed to read the env variable: " << ex.what() << std::endl;
                 // Handle the exception here
                 exit(1);
             }
         }();
 
-        
+
         crow::App<crow::CookieParser, crow::CORSHandler> app;
         //CORS handler
         app.get_middleware<crow::CookieParser>();
@@ -101,7 +106,7 @@ int main()
         CROW_ROUTE(app, "/welcome")([&]() {
             int code = generateRandomNumber();
             CURLcode response;
-            response = sendEmail("peter.spurny@outlook.com", code,"a", "b"); //credentials.username, credentials.password);
+            response = sendEmail("peter.spurny@outlook.com", code,credentials.username, credentials.password);
             //sendPythonEmail("peter.spurny@outlook.com", to_string(generateRandomNumber()));
             return "Welcome!";
             });
@@ -111,7 +116,8 @@ int main()
             int code = generateRandomNumber();
             json req_body = json::parse(req.body);
             std::string mail = req_body["email"].get<std::string>();
-            //sendEmail(mail, code, credentials.username, credentials.password);
+            CURLcode response;
+            response = sendEmail(mail, code, credentials.username, credentials.password);
             json data = parseJson(USERSJ);
             insertCode(mail, data, code);
             return "2fa";
