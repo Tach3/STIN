@@ -39,7 +39,7 @@ size_t read_function(char* buffer, size_t size, size_t nitems, ReadData* data)
     return len;
 }
 
-void sendEmail(const std::string& recipient, int& code, std::string username, std::string password)
+CURLcode sendEmail(const std::string& recipient, int& code, std::string username, std::string password)
 {
     CURL* curl = curl_easy_init();
     if (!curl)
@@ -47,7 +47,7 @@ void sendEmail(const std::string& recipient, int& code, std::string username, st
         fprintf(stderr, "curl_easy_init failed\n");
 
     }
-
+    
     curl_easy_setopt(curl, CURLOPT_USERNAME, username.c_str());
     curl_easy_setopt(curl, CURLOPT_PASSWORD, password.c_str());
     curl_easy_setopt(curl, CURLOPT_URL, SMTP);
@@ -81,6 +81,7 @@ void sendEmail(const std::string& recipient, int& code, std::string username, st
             curl_easy_strerror(res));
         curl_easy_cleanup(curl);
     }
+    return res;
 }
 
 bool isPokus(int& param) {
