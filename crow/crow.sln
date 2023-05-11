@@ -9,7 +9,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "crowTest", "..\crowTest\cro
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CE15D009-AAE4-4900-B2FC-266F5C719604}"
 	ProjectSection(SolutionItems) = preProject
-		CoverageNoParallel2.runsettings = CoverageNoParallel2.runsettings
+		best.runsettings = best.runsettings
 	EndProjectSection
 EndProject
 Global
