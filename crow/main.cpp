@@ -32,8 +32,8 @@ int main()
                 //const std::string password = config.get<std::string>("password");
                 const char* user = std::getenv("USRNM");
                 const char* pass = std::getenv("PSSWD");
-                std::string username = user ? std::string(user) : "";
-                std::string password = pass ? std::string(pass) : "";
+                std::string username(user);
+                std::string password(pass);
                 return { username, password };
             }
             catch (std::exception& ex) {
