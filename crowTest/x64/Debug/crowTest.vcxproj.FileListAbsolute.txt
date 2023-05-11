@@ -1,0 +1,2 @@
+C:\Users\peter\source\repos\crowTest\x64\Debug\crowTest.vcxproj.CopyComplete
+C:\Users\peter\source\repos\ravenBanking\crowTest\x64\Debug\crowTest.vcxproj.CopyComplete
