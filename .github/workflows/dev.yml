@@ -28,6 +28,7 @@ jobs:
         cd vcpkg
         .\bootstrap-vcpkg.bat
         .\vcpkg.exe install curl:x64-windows
+        .\vcpkg.exe install croncpp[core]:x64-windows
         .\vcpkg.exe integrate install
     
     - name: Setup VSTest and add to PATH

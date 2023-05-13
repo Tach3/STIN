@@ -6,7 +6,7 @@
 #include <cstdlib>
 #include <ctime>
 #include "myFunctions.h"
-#include <curl\curl.h>
+#include <curl/curl.h>
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/ini_parser.hpp>
 
@@ -19,6 +19,12 @@ struct Credentials {
    const string password;
 };
 
+enum class SameSitePolicy
+{
+    Strict,
+    Lax,
+    None
+};
 
 int main()
 {
@@ -42,13 +48,14 @@ int main()
                 exit(1);
             }
         }();
-
-
+        
+        vector<Currency*> kurz;
+        
         crow::App<crow::CookieParser, crow::CORSHandler> app;
         //CORS handler
-        app.get_middleware<crow::CookieParser>();
         auto& cors = app.get_middleware<crow::CORSHandler>();
 
+        
         cors
             .global()
             .methods("POST"_method, "GET"_method, "OPTIONS"_method)
@@ -64,11 +71,29 @@ int main()
             .origin("*")
             .prefix("/nocors")
             .ignore();
+        /*
+        cors
+            .global()
+            .headers("X-Custom-Header", "Upgrade-Insecure-Requests")
+            .methods("POST"_method, "GET"_method)
+            .prefix("/cors")
+            .origin("example.com")
+            .prefix("/nocors")
+            .ignore();
+        */
+        CROW_ROUTE(app, "/")
+            ([]() {
+            return "Check Access-Control-Allow-Methods header";
+                });
 
+        CROW_ROUTE(app, "/cors")
+            ([]() {
+            return "Check Access-Control-Allow-Origin header";
+                });
 
         CROW_ROUTE(app, "/login")
             .methods("POST"_method)
-            ([](const crow::request& req) {
+            ([&](const crow::request& req) {
 
             // Parse JSON data from request body
 
@@ -136,7 +161,11 @@ int main()
                 auto& ctx = app.get_context<crow::CookieParser>(req);
 
                 // set a cookie
-                ctx.set_cookie("session", "true");
+                ctx.set_cookie("session", mail)
+                    .path("/")
+                    .secure()
+                    .same_site(crow::CookieParser::Cookie::SameSitePolicy::None);
+                    
             }
             else {
                 response["success"] = false;
@@ -146,7 +175,7 @@ int main()
             return res;
             });
 
-        CROW_ROUTE(app, "/dashboard").methods("GET"_method)
+        CROW_ROUTE(app, "/dashboard").methods("POST"_method)
             ([&](const crow::request& req) {
             // Parse cookies using the CookieParser middleware
             auto& ctx = app.get_context<crow::CookieParser>(req);
@@ -157,10 +186,33 @@ int main()
             else {
                 return crow::response(302);
             }
-                });
+            });
 
+        CROW_ROUTE(app, "/dashboard").methods("GET"_method)
+            ([&](const crow::request& req) {
+            // Parse cookies using the CookieParser middleware
+            auto& ctx = app.get_context<crow::CookieParser>(req);
+            // Check if the "key" cookie exists
+            string email = ctx.get_cookie("session");
+            json data = parseJson(DATAJ);
+            json response_data;
+            response_data["user_info"] = get_user_info(email, data);
+            crow::response res{ response_data.dump() };
+            return res;
+            });
 
-        app.port(18080).multithreaded().run();
+        CROW_ROUTE(app, "/cronjob")([&]() {
+            CURLcode response;
+            response = downloadCNB();
+            freeKurz(kurz);
+            fillKurz(kurz);
+            return crow::response(200);
+            });
 
-        
+        char* port = std::getenv("PORT");
+        uint16_t iPort = static_cast<uint16_t>(port != NULL ? stoi(port) : 18080);
+        std::cout << "Port: " << iPort << endl;
+        app.port(iPort).multithreaded().run();
+
 }
+

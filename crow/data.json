@@ -1,8 +1,12 @@
 [
 {
-  "email": "peter.spurny@tul.cz"
+  "email": "peter.spurny@tul.cz",
+  "account_number": "54806490",
+  "funds": "1772"
 },
 {
-  "email": "peterspurnysemestralka@gmail.com"
+  "email": "peterspurnysemestralka@gmail.com",
+  "account_number": "22222222",
+  "funds": "1989"
 }
 ]

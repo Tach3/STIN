@@ -9,6 +9,52 @@ using json = nlohmann::json;
 #define MAILFROM "peterspurnysemestralka@gmail.com"
 #define SMTP "smtp.gmail.com:587"
 #define USERSJ "users.json"
+#define CNB "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt"
+#define DATAJ "data.json"
+#define CNBTXT "cnb.txt"
+
+class Currency {
+private:
+    string code;
+    double rate;
+    int amount;
+public:
+    Currency(string _code, double _rate, int _amount) {
+        code = _code;
+        rate = _rate;
+        amount = _amount;
+    }
+    string getCode() { return code; }
+    double getRate() { return rate; }
+    void setRate(float kurz) { rate = kurz; }
+    int getAmount() { return amount; }
+    void setAmount(int mnozstvo) { amount = mnozstvo; }
+};
+
+void fillKurz(vector<Currency*>& kurz) {
+    ifstream file(CNBTXT);
+    string line;
+    getline(file, line);
+    getline(file, line);
+
+    while (getline(file, line)) {
+        replace(line.begin(), line.end(), ',', '.');
+        double rate = stod(line.substr(line.find_last_of("|") + 1));
+        line = line.substr(0, line.find_last_of("|"));
+        string code = line.substr(line.find_last_of("|") + 1);
+        line = line.substr(0, line.find_last_of("|"));
+        int amount = stoi(line.substr(line.find_last_of("|") + 1));
+        Currency* currency = new Currency(code, rate, amount);
+        kurz.push_back(currency);
+    }
+
+}
+void freeKurz(vector<Currency*>& kurz) {
+    for (auto& currencyPtr : kurz) {
+        delete currencyPtr;
+    }
+    kurz.clear();
+}
 
 json parseJson(std::string file) {
     ifstream json_file(file);
@@ -28,6 +74,13 @@ struct ReadData
     const char* source;
     size_t size;
 };
+
+static size_t write_data(void* ptr, size_t size, size_t nmemb, void* stream)
+{
+    size_t written = fwrite(ptr, size, nmemb, (FILE*)stream);
+    return written;
+}
+
 
 size_t read_function(char* buffer, size_t size, size_t nitems, ReadData* data)
 {
@@ -81,6 +134,49 @@ CURLcode sendEmail(const std::string& recipient, int& code, std::string username
             curl_easy_strerror(res));
         curl_easy_cleanup(curl);
     }
+    return res;
+}
+
+CURLcode downloadCNB() {
+    CURL* curl_handle;
+    const char* pagefilename = "cnb.txt";
+    FILE* pagefile;
+
+    curl_global_init(CURL_GLOBAL_ALL);
+
+    /* init the curl session */
+    curl_handle = curl_easy_init();
+
+    /* set URL to get here */
+    curl_easy_setopt(curl_handle, CURLOPT_URL, CNB);
+
+    /* Switch on full protocol/debug output while testing */
+    curl_easy_setopt(curl_handle, CURLOPT_VERBOSE, 1L);
+
+    /* disable progress meter, set to 0L to enable it */
+    curl_easy_setopt(curl_handle, CURLOPT_NOPROGRESS, 1L);
+
+    /* send all data to this function  */
+    curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, write_data);
+    CURLcode res = CURLE_FTP_COULDNT_RETR_FILE;
+
+    /* open the file */
+    pagefile = fopen(pagefilename, "wb");
+    if (pagefile) {
+
+        /* write the page body to this file handle */
+        curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, pagefile);
+
+        /* get it! */
+        curl_easy_perform(curl_handle);
+
+        /* close the header file */
+        fclose(pagefile);
+    }
+
+    /* cleanup curl stuff */
+    curl_easy_cleanup(curl_handle);
+
     return res;
 }
 

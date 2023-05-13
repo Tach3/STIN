@@ -306,6 +306,54 @@ namespace crowTest
             response = sendEmail("peter.spurny@outlook.com", code, "john.doe@example.com", "passwordForJohn");
             Assert::AreEqual(to_string(CURLE_LOGIN_DENIED), to_string(response));
         }
+
+        TEST_METHOD(downloadCeskeKurzy)
+        {
+            CURLcode response;
+            response = downloadCNB();
+            Assert::AreEqual(to_string(CURLE_OK), to_string(response));
+            remove(CNBTXT);
+        }
+
+        TEST_METHOD(TestWriteData)
+        {
+            // Create a temporary file for testing
+            const char* filename = "testfile.txt";
+            FILE* file = fopen(filename, "wb");
+            Assert::IsNotNull(file, L"Failed to create a temporary file.");
+
+            // Define test data
+            const char* data = "Hello, World!";
+            size_t dataSize = strlen(data);
+            size_t elementSize = sizeof(char);
+            size_t elementCount = dataSize / elementSize;
+
+            // Call the function under test
+            size_t written = write_data((void*)data, elementSize, elementCount, file);
+
+            // Verify the result
+            Assert::AreEqual(dataSize, written, L"Number of written elements does not match expected.");
+
+            // Clean up
+            fclose(file);
+            remove(filename);
+        }
+
+        TEST_METHOD(CorrectConstruction)
+        {
+            Currency currency("USD", 1.0, 100);
+            Assert::AreEqual(currency.getCode(), std::string("USD"));
+            Assert::AreEqual(currency.getRate(), 1.0);
+            Assert::AreEqual(currency.getAmount(), 100);
+        }
+
+        TEST_METHOD(FreeRate) {
+            Currency* currency = new Currency("USD", 1.0, 100);
+            vector<Currency*> rate;
+            rate.push_back(currency);
+            freeKurz(rate);
+            Assert::IsTrue(rate.empty());
+        }
         
 
 	};
