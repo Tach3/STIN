@@ -12,6 +12,7 @@ using json = nlohmann::json;
 #define CNB "https://www.cnb.cz/cs/financni_trhy/devizovy_trh/kurzy_devizoveho_trhu/denni_kurz.txt"
 #define DATAJ "data.json"
 #define CNBTXT "cnb.txt"
+#define TRANSJ "transactions.json"
 
 class Currency {
 private:
@@ -203,6 +204,39 @@ json get_user_info(const string& email, json& data) {
     // If user is not found, return empty JSON object
     return json{};
 }
+
+json get_user_trans(std::string email, json transactions) {
+    json response;
+
+    for (auto& user : transactions["users"]) {
+        if (user["email"] == email) {
+            // Found the user, return the top 4 transactions
+            response["email"] = user["email"];
+            response["transactions"] = json::array();
+
+            int count = 0;
+            for (auto& trans : user["transactions"]) {
+                if (count >= 4) break;
+
+                json transaction;
+                transaction["from"] = trans.at("from");
+                transaction["account"] = trans.at("account");
+                transaction["date"] = trans.at("date");
+                transaction["amount"] = trans.at("amount");
+                response["transactions"].push_back(transaction);
+
+                count++;
+            }
+
+            return response;
+        }
+    }
+
+    // User not found, return an empty JSON object
+    return response;
+}
+
+
 
 bool verify_login(const string& email, const string& password, json& data) {
     for (auto& user : data) {

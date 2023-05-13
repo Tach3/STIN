@@ -67,20 +67,15 @@ int main()
             .origin("http://localhost:8000")
             .allow_credentials()
             .headers("*", "content-type")
+            .prefix("/transactions")
+            .origin("http://localhost:8000")
+            .allow_credentials()
+            .headers("*", "content-type")
             .prefix("/cors")
             .origin("*")
             .prefix("/nocors")
             .ignore();
-        /*
-        cors
-            .global()
-            .headers("X-Custom-Header", "Upgrade-Insecure-Requests")
-            .methods("POST"_method, "GET"_method)
-            .prefix("/cors")
-            .origin("example.com")
-            .prefix("/nocors")
-            .ignore();
-        */
+
         CROW_ROUTE(app, "/")
             ([]() {
             return "Check Access-Control-Allow-Methods header";
@@ -181,13 +176,18 @@ int main()
             auto& ctx = app.get_context<crow::CookieParser>(req);
             // Check if the "key" cookie exists
             if (!ctx.get_cookie("session").empty()) {
-                return crow::response(200);
+                string email = ctx.get_cookie("session");
+                json data = parseJson(DATAJ);
+                json response_data;
+                response_data["user_info"] = get_user_info(email, data);
+                crow::response res{ response_data.dump() };
+                return res;
             }
             else {
                 return crow::response(302);
             }
             });
-
+        /*
         CROW_ROUTE(app, "/dashboard").methods("GET"_method)
             ([&](const crow::request& req) {
             // Parse cookies using the CookieParser middleware
@@ -200,7 +200,35 @@ int main()
             crow::response res{ response_data.dump() };
             return res;
             });
+        */
+        CROW_ROUTE(app, "/transactions").methods("POST"_method)
+            ([&](const crow::request& req) {
+            // Parse cookies using the CookieParser middleware
+            auto& ctx = app.get_context<crow::CookieParser>(req);
+            // Check if the "key" cookie exists
+            if (!ctx.get_cookie("session").empty()) {
+                string email = ctx.get_cookie("session");
+                json transactions = parseJson(TRANSJ);
 
+                json response_tran = get_user_trans(email, transactions);
+                crow::response res{ response_tran.dump() };
+                return res;
+            }
+            else {
+                return crow::response(302);
+            }
+                });
+        /*
+        CROW_ROUTE(app, "/transactions").methods("GET"_method) ([&](const crow::request& req) {
+            auto& ctx = app.get_context<crow::CookieParser>(req);
+            string email = ctx.get_cookie("session");
+            json transactions = parseJson(TRANSJ);
+            
+            json response_tran = get_user_trans(email, transactions);
+            crow::response res{ response_tran.dump() };
+            return res;
+            });
+        */
         CROW_ROUTE(app, "/cronjob")([&]() {
             CURLcode response;
             response = downloadCNB();
