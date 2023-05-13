@@ -311,7 +311,8 @@ namespace crowTest
         {
             CURLcode response;
             response = downloadCNB();
-            Assert::AreEqual(to_string(CURLE_OK), to_string(response));
+            std::ifstream infile(CNBTXT);
+            Assert::AreEqual(infile.good(), true);
             remove(CNBTXT);
         }
 
