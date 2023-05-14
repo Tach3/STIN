@@ -110,7 +110,7 @@ CURLcode sendEmail(const std::string& recipient, int& code, std::string username
     struct curl_slist* rcpt = NULL;
     rcpt = curl_slist_append(rcpt, recipient.c_str());
     curl_easy_setopt(curl, CURLOPT_MAIL_RCPT, rcpt);
-    string message = "Date: Mon, 29 Nov 2010 21:54:29 +1100\r\n"
+    string message = "Date: \r\n"
         "To: " + recipient + "\r\n"
         "From: " MAILFROM "\r\n"
         "Subject: Verification Code\r\n"
@@ -195,9 +195,11 @@ json get_user_info(const string& email, json& data) {
     // Search for the user with email
     for (auto& user : data) {
         if (user["email"] == email) {
-            // Found the user, print the account number and funds
-            return json{ {"account_number", user["account_number"]},{"funds", user["funds"]} };
-
+            // Found the user, return the account numbers and funds associated with it
+            return json{
+                {"account_1", {{"Currency", user["accounts"][0]["Currency"]},{"account_number", user["accounts"][0]["account_number"]},{"funds", user["accounts"][0]["funds"]}}},
+                {"account_2", {{"Currency", user["accounts"][1]["Currency"]},{"account_number", user["accounts"][1]["account_number"]},{"funds", user["accounts"][1]["funds"]}}}
+            };
         }
     }
 
@@ -205,36 +207,64 @@ json get_user_info(const string& email, json& data) {
     return json{};
 }
 
-json get_user_trans(std::string email, json transactions) {
+json get_user_account( std::string email, json& data, std::string account_number) {
+    // Loop through each object in the JSON array
+    for (auto& user : data) {
+        // Check if the email matches
+        if (user["email"] == email) {
+            // Loop through each account object in the "accounts" array
+            for (auto& account : user["accounts"]) {
+                // Check if the account number matches
+                if (account["account_number"] == account_number) {
+                    // Return the account object
+                    return account;
+                }
+            }
+        }
+    }
+
+    // If no account is found, return an empty JSON object
+    return json();
+}
+
+json get_user_trans(std::string& email, json& transactions) {
     json response;
 
     for (auto& user : transactions["users"]) {
         if (user["email"] == email) {
-            // Found the user, return the top 4 transactions
+            // Found the user, return the top 4 transactions for each account
             response["email"] = user["email"];
-            response["transactions"] = json::array();
+            response["accounts"] = json::array();
 
-            int count = 0;
-            for (auto& trans : user["transactions"]) {
-                if (count >= 4) break;
+            for (auto& account : user["accounts"]) {
+                json accountObj;
+                accountObj["account_number"] = account["account_number"];
+                accountObj["Currency"] = account["Currency"];
+                accountObj["transactions"] = json::array();
 
-                json transaction;
-                transaction["from"] = trans.at("from");
-                transaction["account"] = trans.at("account");
-                transaction["date"] = trans.at("date");
-                transaction["amount"] = trans.at("amount");
-                response["transactions"].push_back(transaction);
+                int count = 0;
+                for (auto& trans : account["transactions"]) {
+                    if (count >= 4) break;
 
-                count++;
+                    json transaction;
+                    transaction["account"] = trans.at("account");
+                    transaction["date"] = trans.at("date");
+                    transaction["amount"] = trans.at("amount");
+                    accountObj["transactions"].push_back(transaction);
+
+                    count++;
+                }
+
+                response["accounts"].push_back(accountObj);
             }
 
             return response;
         }
     }
-
     // User not found, return an empty JSON object
     return response;
 }
+
 
 
 
@@ -261,23 +291,98 @@ void insertCode(const string& email, json& data, int& code) {
     o << data.dump() << endl;
 }
 
-bool verifyCode(const string& email, json& data, string& code) {
+json getUserCurrencies(const string& email, json& data, const string& code) {
     for (auto& user : data) {
-        if (user["email"] == email) {
-            // Found the user, verify code
-            if (user["code"] == code) {
-                return true;
-            }
-            else {
-                return false;
+        if (user["email"] == email && user["code"] == code) {
+            // Found the user, return currencies
+            return user["currencies"];
+        }
+    }
+    // User not found, return empty JSON object
+    return json();
+}
+
+double findCurrency(const string& code, const std::vector<Currency*>& kurz) {
+    for (auto currency : kurz) {
+        if (currency->getCode() == code) {
+            return currency->getRate();
+        }
+    }
+    return 0;
+}
+
+double findRate(vector<Currency*>& kurz, string& currencyTo, string& currencyFrom) {
+    double currTo = findCurrency(currencyTo, kurz);
+    double currFrom = findCurrency(currencyFrom, kurz);
+    return currTo / currFrom;
+}
+
+double findCZRate(vector<Currency*>& kurz, string& currencyTo, string& currencyFrom) {
+    if (currencyTo == "CZK") {
+        for (auto currency : kurz) {
+            if (currency->getCode() == currencyFrom) {
+                return currency->getAmount() / currency->getRate();
             }
         }
     }
-    return false;
+    else {
+        for (auto currency : kurz) {
+            if (currency->getCode() == currencyTo) {
+                return currency->getRate() / currency->getAmount();
+            }
+        }
+    }
 }
 
 int generateRandomNumber() {
     srand(time(NULL));  // Seed the random number generator with the current time
     int random_number = rand() % 9000 + 1000;  // Generate a random number between 1000 and 9999
     return random_number;
+}
+
+void updateUserData(string& email, string& customer_account, string& transfer_amount) {
+    ifstream ifs(DATAJ);
+    json data_json;
+    ifs >> data_json;
+    for (auto& user : data_json) {
+        if (user["email"] == email) {
+            for (auto& account : user["accounts"]) {
+                if (account["account_number"] == customer_account) {
+                    string current_funds = account["funds"];
+                    account["funds"] = to_string(stod(current_funds) - stod(transfer_amount));
+                }
+            }
+        }
+    }
+    ofstream ofs(DATAJ);
+    ofs << data_json.dump(4) << endl;
+}
+
+void updateTransactions(string& email, json& transaction) {
+    ifstream ifs(TRANSJ);
+    json data_json;
+    ifs >> data_json;
+    for (auto& user : data_json["users"]) {
+        // loop through each account for the current user
+        if (user["email"] == email) {
+            for (auto& account : user["accounts"]) {
+                // loop through each transaction for the current account
+                if (account["account_number"] == transaction["accountFrom"]) {
+                    string amount = transaction["amount"];
+                    amount = to_string(stod(amount) * -1);
+                    time_t now = time(0);
+                    // convert now to string form
+                    char* date_time = ctime(&now);
+                    json newTransaction = {
+                        {"date", string(date_time)},
+                        {"amount", amount},
+                        {"account", transaction["accountNumber"]}
+                    };
+                    account["transactions"].insert(account["transactions"].begin(), newTransaction);
+                }
+            }
+        }
+    }
+    std::ofstream ofs(TRANSJ);
+    ofs << data_json.dump(4) << std::endl;
 }

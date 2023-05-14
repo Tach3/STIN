@@ -1,4 +1,4 @@
 ﻿  crowTest.cpp
-C:\Users\peter\source\repos\ravenBanking\crow\myFunctions.h(246,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
-     Creating library C:\Users\peter\source\repos\ravenBanking\crow\x64\Debug\crowTest.lib and object C:\Users\peter\source\repos\ravenBanking\crow\x64\Debug\crowTest.exp
+C:\Users\peter\source\repos\ravenBanking\crow\myFunctions.h(338,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+C:\Users\peter\source\repos\ravenBanking\crow\myFunctions.h(335): warning C4715: 'findCZRate': not all control paths return a value
   crowTest.vcxproj -> C:\Users\peter\source\repos\ravenBanking\crow\x64\Debug\crowTest.dll

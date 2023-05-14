@@ -1,71 +1,108 @@
 {
-	"users": [{
-			"email": "peter.spurny@tul.cz",
-			"transactions": [{
-					"from": "jane.doe@example.com",
-					"account": "92105347",
-					"date": "2022-05-15",
-					"amount": "100.0"
-				},
-				{
-					"from": "jane.doe@example.com",
-					"account": "92105347",
-					"date": "2022-05-14",
-					"amount": "-50.0"
-				},
-				{
-					"from": "john.doe@example.com",
-					"account": "44022619",
-					"date": "2022-05-13",
-					"amount": "-150.0"
-				},
-				{
-					"from": "john.doe@example.com",
-					"account": "44022619",
-					"date": "2022-05-12",
-					"amount": "-2000.0"
-				},
-				{
-					"from": "john.doe@example.com",
-					"account": "44022619",
-					"date": "2022-05-11",
-					"amount": "-120.0"
-				}
-			]
-		},
-		{
-			"email": "peterspurnysemestralka@gmail.com",
-			"transactions": [{
-					"from": "john.doe@example.com",
-					"account": "44022619",
-					"date": "2022-05-15",
-					"amount": "-100.0"
-				},
-				{
-					"from": "john.doe@example.com",
-					"account": "44022619",
-					"date": "2022-05-14",
-					"amount": "50.0"
-				},
-				{
-					"from": "jane.doe@example.com",
-					"account": "92105347",
-					"date": "2022-05-13",
-					"amount": "200.0"
-				},
-				{
-					"from": "jane.doe@example.com",
-					"account": "92105347",
-					"date": "2022-05-12",
-					"amount": "-150.0"
-				},
-				{
-					"from": "john.doe@example.com",
-					"account": "44022619",
-					"date": "2022-05-11",
-					"amount": "-120.0"
-				}
-			]
-		}
-	]
+    "users": [
+        {
+            "accounts": [
+                {
+                    "Currency": "CZK",
+                    "account_number": "54806490",
+                    "transactions": [
+                        {
+                            "account": "45116119",
+                            "amount": "-50.000000",
+                            "date": "Sun May 14 20:36:49 2023\n"
+                        },
+                        {
+                            "account": "45116119",
+                            "amount": "100.000000",
+                            "date": "Sun May 14 20:36:43 2023\n"
+                        },
+                        {
+                            "account": "45116119",
+                            "amount": "-200.000000",
+                            "date": "Sun May 14 20:36:24 2023\n"
+                        }
+                    ]
+                },
+                {
+                    "Currency": "EUR",
+                    "account_number": "54806491",
+                    "transactions": [
+                        {
+                            "account": "45116119",
+                            "amount": "-150.000000",
+                            "date": "Sun May 14 20:38:07 2023\n"
+                        },
+                        {
+                            "account": "45116119",
+                            "amount": "-100.000000",
+                            "date": "Sun May 14 20:37:45 2023\n"
+                        },
+                        {
+                            "account": "45116119",
+                            "amount": "500.000000",
+                            "date": "Sun May 14 20:37:38 2023\n"
+                        }
+                    ]
+                }
+            ],
+            "email": "peter.spurny@tul.cz"
+        },
+        {
+            "accounts": [
+                {
+                    "Currency": "CZK",
+                    "account_number": "22222222",
+                    "transactions": [
+                        {
+                            "account": "55555555",
+                            "amount": "-708.150000",
+                            "date": "Mon May 15 00:11:44 2023\n"
+                        },
+                        {
+                            "account": "45116119",
+                            "amount": "-541.950000",
+                            "date": "Sun May 14 23:56:18 2023\n"
+                        },
+                        {
+                            "account": "45454545",
+                            "amount": "2124.444000",
+                            "date": "Sun May 14 20:50:29 2023\n"
+                        },
+                        {
+                            "account": "45116119",
+                            "amount": "-250.000000",
+                            "date": "Sun May 14 20:39:57 2023\n"
+                        }
+                    ]
+                },
+                {
+                    "Currency": "USD",
+                    "account_number": "22222223",
+                    "transactions": [
+                        {
+                            "account": "65656565",
+                            "amount": "-11.532000",
+                            "date": "Mon May 15 00:21:45 2023\n"
+                        },
+                        {
+                            "account": "46896532",
+                            "amount": "-70.777978",
+                            "date": "Sun May 14 20:53:49 2023\n"
+                        },
+                        {
+                            "account": "45116119",
+                            "amount": "-200.000000",
+                            "date": "Sun May 14 20:34:40 2023\n"
+                        },
+                        {
+                            "account": "45116119",
+                            "amount": "1000.000000",
+                            "date": "Sun May 14 20:34:36 2023\n"
+                        }
+                    ]
+                }
+            ],
+            "email": "peterspurnysemestralka@gmail.com"
+        }
+    ]
 }

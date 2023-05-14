@@ -1,12 +1,32 @@
 [
-{
-  "email": "peter.spurny@tul.cz",
-  "account_number": "54806490",
-  "funds": "1772"
-},
-{
-  "email": "peterspurnysemestralka@gmail.com",
-  "account_number": "22222222",
-  "funds": "1989"
-}
+    {
+        "accounts": [
+            {
+                "Currency": "CZK",
+                "account_number": "54806490",
+                "funds": "1772"
+            },
+            {
+                "Currency": "EUR",
+                "account_number": "54806491",
+                "funds": "3090"
+            }
+        ],
+        "email": "peter.spurny@tul.cz"
+    },
+    {
+        "accounts": [
+            {
+                "Currency": "CZK",
+                "account_number": "22222222",
+                "funds": "1249.900000"
+            },
+            {
+                "Currency": "USD",
+                "account_number": "22222223",
+                "funds": "917.690000"
+            }
+        ],
+        "email": "peterspurnysemestralka@gmail.com"
+    }
 ]

@@ -50,7 +50,7 @@ int main()
         }();
         
         vector<Currency*> kurz;
-        
+        fillKurz(kurz);
         crow::App<crow::CookieParser, crow::CORSHandler> app;
         //CORS handler
         auto& cors = app.get_middleware<crow::CORSHandler>();
@@ -71,20 +71,83 @@ int main()
             .origin("http://localhost:8000")
             .allow_credentials()
             .headers("*", "content-type")
+            .prefix("/check")
+            .origin("http://localhost:8000")
+            .allow_credentials()
+            .headers("*", "content-type")
+            .prefix("/transfer")
+            .origin("http://localhost:8000")
+            .allow_credentials()
+            .headers("*", "content-type")
             .prefix("/cors")
             .origin("*")
             .prefix("/nocors")
             .ignore();
 
-        CROW_ROUTE(app, "/")
-            ([]() {
-            return "Check Access-Control-Allow-Methods header";
-                });
-
-        CROW_ROUTE(app, "/cors")
-            ([]() {
-            return "Check Access-Control-Allow-Origin header";
-                });
+        CROW_ROUTE(app, "/check").methods("POST"_method)
+            ([&](const crow::request& req) {
+            
+            auto& ctx = app.get_context<crow::CookieParser>(req);
+            if (!ctx.get_cookie("session").empty()) {
+                
+                return crow::response(200);
+            }
+            else {
+                return crow::response(404);
+            }
+            });
+        
+        CROW_ROUTE(app, "/transfer").methods("POST"_method)
+            ([&](const crow::request& req) {
+            //{"accountFrom": "22222222","accountNumber":"45116119","amount":"456","currency":"CZK"}
+            auto& ctx = app.get_context<crow::CookieParser>(req);
+            json transfer = json::parse(req.body);
+            string email = ctx.get_cookie("session");
+            json data = parseJson(DATAJ);
+            json customer = get_user_account(email, data, transfer["accountFrom"]); //{"account_1":{"Currency":"CZK","account_number":"22222222","funds":"1989"},"account_2":{"Currency":"USD","account_number":"22222223","funds":"1500"}}
+            string amount = transfer["amount"];
+            string funds = customer["funds"];
+           if (transfer["currency"] == customer["Currency"]) {//currency sedi
+                if (stoi(amount) < stoi(funds)) {
+                    //todo edit dataj, edit transactions
+                    string transfer_amount = transfer["amount"];
+                    string customer_account = customer["account_number"];
+                    updateUserData(email, customer_account, transfer_amount);
+                    updateTransactions(email, transfer);
+                    return crow::response(200);
+                }
+                else {
+                    return crow::response(404);
+                }
+            }
+            else {//currency nesedi
+                string currencyTo = transfer["currency"];
+                string currencyFrom = customer["Currency"];
+                double c_rate;
+                if (currencyTo == "CZK" || currencyFrom == "CZK") {
+                    c_rate = findCZRate(kurz, currencyTo, currencyFrom);
+                }
+                else {
+                    c_rate = findRate(kurz, currencyTo, currencyFrom);
+                }
+                double transferAmount = stoi(amount) * c_rate;
+                  if (transferAmount < stoi(funds)) {
+                    string transfer_amount = to_string(transferAmount);
+                    string customer_account = customer["account_number"];
+                    transfer["amount"] = transfer_amount;
+                    updateUserData(email, customer_account, transfer_amount);
+                    updateTransactions(email, transfer);
+                       return crow::response(200);
+                   }
+                   else {
+                       return crow::response(404);
+                   }
+               }
+                
+                return crow::response(200);
+          
+            });
+        
 
         CROW_ROUTE(app, "/login")
             .methods("POST"_method)
@@ -107,7 +170,6 @@ int main()
             if (is_valid_login) {
                 response_data["success"] = true;
                 response_data["message"] = "Login succeeded";
-                //response_data["user_info"] = get_user_info(email, data); // Custom function to get user info
             }
             else {
                 response_data["success"] = false;
@@ -148,11 +210,9 @@ int main()
             std::string mail = req_body["email"].get<std::string>();
             std::string code = req_body["code"].get<std::string>();
             json data = parseJson(USERSJ);
-            bool isVerified = verifyCode(mail, data, code);
-            json response;
-            if (isVerified) {
-                response["success"] = true;
-                response["message"] = "Login succeeded";
+            json response = getUserCurrencies(mail, data, code);
+            if (!response.empty()) {
+                
                 auto& ctx = app.get_context<crow::CookieParser>(req);
 
                 // set a cookie
@@ -163,8 +223,7 @@ int main()
                     
             }
             else {
-                response["success"] = false;
-                response["message"] = "Invalid code";
+                return crow::response(404);
             }
             crow::response res{ response.dump() };
             return res;
@@ -184,23 +243,9 @@ int main()
                 return res;
             }
             else {
-                return crow::response(302);
+                return crow::response(404);
             }
             });
-        /*
-        CROW_ROUTE(app, "/dashboard").methods("GET"_method)
-            ([&](const crow::request& req) {
-            // Parse cookies using the CookieParser middleware
-            auto& ctx = app.get_context<crow::CookieParser>(req);
-            // Check if the "key" cookie exists
-            string email = ctx.get_cookie("session");
-            json data = parseJson(DATAJ);
-            json response_data;
-            response_data["user_info"] = get_user_info(email, data);
-            crow::response res{ response_data.dump() };
-            return res;
-            });
-        */
         CROW_ROUTE(app, "/transactions").methods("POST"_method)
             ([&](const crow::request& req) {
             // Parse cookies using the CookieParser middleware
@@ -209,26 +254,14 @@ int main()
             if (!ctx.get_cookie("session").empty()) {
                 string email = ctx.get_cookie("session");
                 json transactions = parseJson(TRANSJ);
-
                 json response_tran = get_user_trans(email, transactions);
                 crow::response res{ response_tran.dump() };
                 return res;
             }
             else {
-                return crow::response(302);
+                return crow::response(404);
             }
-                });
-        /*
-        CROW_ROUTE(app, "/transactions").methods("GET"_method) ([&](const crow::request& req) {
-            auto& ctx = app.get_context<crow::CookieParser>(req);
-            string email = ctx.get_cookie("session");
-            json transactions = parseJson(TRANSJ);
-            
-            json response_tran = get_user_trans(email, transactions);
-            crow::response res{ response_tran.dump() };
-            return res;
             });
-        */
         CROW_ROUTE(app, "/cronjob")([&]() {
             CURLcode response;
             response = downloadCNB();

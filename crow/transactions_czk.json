@@ -1,0 +1,71 @@
+{
+	"users": [{
+			"email": "peter.spurny@tul.cz",
+			"transactions": [{
+					"from": "jane.doe@example.com",
+					"account": "92105347",
+					"date": "2022-05-15",
+					"amount": "100.0"
+				},
+				{
+					"from": "jane.doe@example.com",
+					"account": "92105347",
+					"date": "2022-05-14",
+					"amount": "-50.0"
+				},
+				{
+					"from": "john.doe@example.com",
+					"account": "44022619",
+					"date": "2022-05-13",
+					"amount": "-150.0"
+				},
+				{
+					"from": "john.doe@example.com",
+					"account": "44022619",
+					"date": "2022-05-12",
+					"amount": "-2000.0"
+				},
+				{
+					"from": "john.doe@example.com",
+					"account": "44022619",
+					"date": "2022-05-11",
+					"amount": "-120.0"
+				}
+			]
+		},
+		{
+			"email": "peterspurnysemestralka@gmail.com",
+			"transactions": [{
+					"from": "john.doe@example.com",
+					"account": "44022619",
+					"date": "2022-05-15",
+					"amount": "-100.0"
+				},
+				{
+					"from": "john.doe@example.com",
+					"account": "44022619",
+					"date": "2022-05-14",
+					"amount": "50.0"
+				},
+				{
+					"from": "jane.doe@example.com",
+					"account": "92105347",
+					"date": "2022-05-13",
+					"amount": "200.0"
+				},
+				{
+					"from": "jane.doe@example.com",
+					"account": "92105347",
+					"date": "2022-05-12",
+					"amount": "-150.0"
+				},
+				{
+					"from": "john.doe@example.com",
+					"account": "44022619",
+					"date": "2022-05-11",
+					"amount": "-120.0"
+				}
+			]
+		}
+	]
+}
