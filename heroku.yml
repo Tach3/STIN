@@ -1,0 +1,12 @@
+build:
+  docker:
+    web: crow/Dockerfile
+
+release:
+  image: web
+  command:
+    - ./main
+
+env:
+  USRNM: ${{ secrets.USRNM }}
+  PSSWD: ${{ secrets.PSSWD }}
