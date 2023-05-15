@@ -19,6 +19,6 @@ jobs:
           docker_build_args: |
             USRNM
             PSSWD
-          env:
-            NODE_ENV: ${{ secrets.USRNM }}
-            SECRET_KEY: ${{ secrets.PSSWD }}
+        env:
+            USRNM: ${{ secrets.USRNM }}
+            PSSWD: ${{ secrets.PSSWD }}
