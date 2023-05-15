@@ -342,9 +342,106 @@ namespace crowTest
             rate = findCZRate(rate_v, czkStr, usdStr);
             Assert::AreEqual(rate, 1.0000/21.0000);
         }
+        TEST_METHOD(ReturnsUserTransactions)
+        {
+            // Sample input data
+            std::string email = "john.doe@example.com";
 
+            json transactions = R"(
+                {
+                    "users": [
+                        {
+                            "email": "john.doe@example.com",
+                            "accounts": [
+                                {
+                                    "account_number": "1234567890",
+                                    "Currency": "USD",
+                                    "transactions": [
+                                        {
+                                            "account": "9876543210",
+                                            "date": "2023-05-01",
+                                            "amount": 100.0
+                                        },
+                                        {
+                                            "account": "9876543210",
+                                            "date": "2023-05-02",
+                                            "amount": -50.0
+                                        },
+                                        {
+                                            "account": "9876543210",
+                                            "date": "2023-05-03",
+                                            "amount": 200.0
+                                        }
+                                    ]
+                                }
+                            ]
+                        }
+                    ]
+                })"_json;
 
-        
+            // Call the function
+            json result = get_user_trans(email, transactions);
+
+            // Assert the expected response
+            Assert::AreEqual(email, result["email"].get<std::string>());
+
+            json accounts = result["accounts"];
+
+            json account = accounts[0];
+            Assert::AreEqual(string("1234567890"), account["account_number"].get<std::string>());
+            Assert::AreEqual(string("USD"), account["Currency"].get<std::string>());       
+        }
+
+        TEST_METHOD(ReturnsUserAccount)
+        {
+            // Sample input data
+            std::string email = "john.doe@example.com";
+            std::string accountNumber = "1234567890";
+
+            json data = R"(
+                [
+                    {
+                        "email": "john.doe@example.com",
+                        "accounts": [
+                            {
+                                "account_number": "9876543210",
+                                "balance": 1000.0
+                            },
+                            {
+                                "account_number": "1234567890",
+                                "balance": 500.0
+                            }
+                        ]
+                    },
+                    {
+                        "email": "jane.doe@example.com",
+                        "accounts": [
+                            {
+                                "account_number": "5432109876",
+                                "balance": 2000.0
+                            }
+                        ]
+                    }
+                ]
+            )"_json;
+
+            // Call the function
+            json result = get_user_account(email, data, accountNumber);
+
+            // Assert the expected account object
+            Assert::IsTrue(result.is_object());
+            Assert::AreEqual(accountNumber, result["account_number"].get<std::string>());
+            Assert::AreEqual(500.0, result["balance"].get<double>());
+        }
+
+        TEST_METHOD(FillsKurzVectorFromFile)
+        {
+
+            std::vector<Currency*> kurz;
+            fillKurz(kurz);
+
+            Assert::AreEqual(size_t(31), kurz.size());
+        }
 
 	};
 }

@@ -54,6 +54,16 @@
                     "account_number": "22222222",
                     "transactions": [
                         {
+                            "account": "22222222",
+                            "amount": "235.650000",
+                            "date": "Mon May 15 17:32:42 2023\n"
+                        },
+                        {
+                            "account": "22222222",
+                            "amount": "200.000000",
+                            "date": "Mon May 15 17:32:07 2023\n"
+                        },
+                        {
                             "account": "55555555",
                             "amount": "-708.150000",
                             "date": "Mon May 15 00:11:44 2023\n"
@@ -79,6 +89,21 @@
                     "Currency": "USD",
                     "account_number": "22222223",
                     "transactions": [
+                        {
+                            "account": "22222223",
+                            "amount": "0.969037",
+                            "date": "Mon May 15 17:22:59 2023\n"
+                        },
+                        {
+                            "account": "22222223",
+                            "amount": "98.000000",
+                            "date": "Mon May 15 17:16:46 2023\n"
+                        },
+                        {
+                            "account": "65656565",
+                            "amount": "-17.000000",
+                            "date": "Mon May 15 10:51:37 2023\n"
+                        },
                         {
                             "account": "65656565",
                             "amount": "-11.532000",

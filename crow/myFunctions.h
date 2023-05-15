@@ -332,6 +332,7 @@ double findCZRate(vector<Currency*>& kurz, string& currencyTo, string& currencyF
             }
         }
     }
+    return 0;
 }
 
 int generateRandomNumber() {

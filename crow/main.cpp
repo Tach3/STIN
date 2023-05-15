@@ -30,12 +30,6 @@ int main()
 {
         const Credentials credentials = []() -> Credentials {
             try {
-                //boost::property_tree::ptree config;
-                //boost::property_tree::ini_parser::read_ini("config.ini", config);
-
-                // Get the username and password from the configuration file
-                //const std::string username = config.get<std::string>("username");
-                //const std::string password = config.get<std::string>("password");
                 const char* user = std::getenv("USRNM");
                 const char* pass = std::getenv("PSSWD");
                 std::string username(user);
@@ -76,6 +70,10 @@ int main()
             .allow_credentials()
             .headers("*", "content-type")
             .prefix("/transfer")
+            .origin("http://localhost:8000")
+            .allow_credentials()
+            .headers("*", "content-type")
+            .prefix("/deposit")
             .origin("http://localhost:8000")
             .allow_credentials()
             .headers("*", "content-type")
@@ -143,11 +141,46 @@ int main()
                        return crow::response(404);
                    }
                }
-                
-                return crow::response(200);
-          
+            return crow::response(404);
             });
-        
+        CROW_ROUTE(app, "/deposit")
+            .methods("POST"_method)
+            ([&](const crow::request& req) {
+            auto& ctx = app.get_context<crow::CookieParser>(req);
+            json deposit = json::parse(req.body);
+            string email = ctx.get_cookie("session");
+            json data = parseJson(DATAJ);
+            json customer = get_user_account(email, data, deposit["accountFrom"]);
+            string amount = deposit["amount"];
+            if (deposit["currency"] == customer["Currency"]) {
+                amount = to_string(stod(amount) * -1);
+                deposit["amount"] = amount;
+                string customer_account = customer["account_number"];
+                updateUserData(email, customer_account, amount);
+                updateTransactions(email, deposit);
+                return crow::response(200);
+            }
+            else {
+                //todo konvertuj, pripis, vloz transakciu
+                string currencyTo = deposit["currency"];
+                string currencyFrom = customer["Currency"];
+                double c_rate;
+                if (currencyTo == "CZK" || currencyFrom == "CZK") {
+                    c_rate = findCZRate(kurz, currencyTo, currencyFrom);
+                }
+                else {
+                    c_rate = findRate(kurz, currencyTo, currencyFrom);
+                }
+                double transferAmount = stoi(amount) * c_rate;
+                string transfer_amount = to_string(transferAmount*-1);
+                string customer_account = customer["account_number"];
+                deposit["amount"] = transfer_amount;
+                updateUserData(email, customer_account, transfer_amount);
+                updateTransactions(email, deposit);
+                return crow::response(200);
+            }
+            return crow::response(404);
+                });
 
         CROW_ROUTE(app, "/login")
             .methods("POST"_method)
