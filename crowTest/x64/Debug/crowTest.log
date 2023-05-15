@@ -1,5 +1,4 @@
-﻿  pch.cpp
-  crowTest.cpp
-C:\Users\peter\source\repos\ravenBanking\crow\myFunctions.h(149,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
+﻿  crowTest.cpp
+C:\Users\peter\source\repos\ravenBanking\crow\myFunctions.h(339,15): warning C4244: 'argument': conversion from 'time_t' to 'unsigned int', possible loss of data
      Creating library C:\Users\peter\source\repos\ravenBanking\crow\x64\Debug\crowTest.lib and object C:\Users\peter\source\repos\ravenBanking\crow\x64\Debug\crowTest.exp
   crowTest.vcxproj -> C:\Users\peter\source\repos\ravenBanking\crow\x64\Debug\crowTest.dll
