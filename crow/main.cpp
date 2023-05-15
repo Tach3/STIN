@@ -42,7 +42,7 @@ int main()
                 exit(1);
             }
         }();
-        
+        cout << credentials.username << " " << credentials.password << endl;
         vector<Currency*> kurz;
         fillKurz(kurz);
         crow::App<crow::CookieParser, crow::CORSHandler> app;
@@ -54,27 +54,27 @@ int main()
             .global()
             .methods("POST"_method, "GET"_method, "OPTIONS"_method)
             .prefix("/2faCode")
-            .origin("http://localhost:8000")
+            .origin("http://stuwrk.nti.tul.cz")
             .allow_credentials()
             .headers("*", "content-type")
             .prefix("/dashboard")
-            .origin("http://localhost:8000")
+            .origin("http://stuwrk.nti.tul.cz")
             .allow_credentials()
             .headers("*", "content-type")
             .prefix("/transactions")
-            .origin("http://localhost:8000")
+            .origin("http://stuwrk.nti.tul.cz")
             .allow_credentials()
             .headers("*", "content-type")
             .prefix("/check")
-            .origin("http://localhost:8000")
+            .origin("http://stuwrk.nti.tul.cz")
             .allow_credentials()
             .headers("*", "content-type")
             .prefix("/transfer")
-            .origin("http://localhost:8000")
+            .origin("http://stuwrk.nti.tul.cz")
             .allow_credentials()
             .headers("*", "content-type")
             .prefix("/deposit")
-            .origin("http://localhost:8000")
+            .origin("http://stuwrk.nti.tul.cz")
             .allow_credentials()
             .headers("*", "content-type")
             .prefix("/cors")
