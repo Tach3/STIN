@@ -1,0 +1,24 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.14 # This is the action
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "raven-banking" #Must be unique in Heroku
+          heroku_email: "peter.spurny@tul.cz"
+          usedocker: true
+          docker_build_args: |
+            USRNM
+            PSSWD
+        env:
+          USRNM: ${{ secrets.USRNM }}
+          PSSWD: ${{ secrets.PSSWD }}

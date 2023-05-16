@@ -19,12 +19,12 @@
             {
                 "Currency": "CZK",
                 "account_number": "22222222",
-                "funds": "2265.550000"
+                "funds": "2500"
             },
             {
                 "Currency": "USD",
                 "account_number": "22222223",
-                "funds": "1000.659037"
+                "funds": "1000"
             }
         ],
         "email": "peterspurnysemestralka@gmail.com"
