@@ -99,6 +99,7 @@ int main()
         //{"accountFrom": "22222222","accountNumber":"45116119","amount":"456","currency":"CZK"}
         auto& ctx = app.get_context<crow::CookieParser>(req);
         json transfer = json::parse(req.body);
+        string orgAmount = transfer["amount"];
         string email = ctx.get_cookie("session");
         json data = parseJson(DATAJ);
         json customer = get_user_account(email, data, transfer["accountFrom"]); //{"account_1":{"Currency":"CZK","account_number":"22222222","funds":"1989"},"account_2":{"Currency":"USD","account_number":"22222223","funds":"1500"}}
@@ -137,6 +138,7 @@ int main()
             switchAccountVariables(transfer);
             json client = get_user_account(ourClient, data, transfer["accountFrom"]);
             if (client["Currency"] == transfer["currency"]) {
+                transfer["amount"] = to_string(stod(orgAmount) * -1);
                 updateUserData(ourClient, transfer["accountFrom"], transfer["amount"]);
                 updateTransactions(ourClient, transfer);
             }
