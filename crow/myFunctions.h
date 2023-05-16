@@ -101,7 +101,7 @@ CURLcode sendEmail(const std::string& recipient, int& code, std::string username
         fprintf(stderr, "curl_easy_init failed\n");
 
     }
-    
+
     curl_easy_setopt(curl, CURLOPT_USERNAME, username.c_str());
     curl_easy_setopt(curl, CURLOPT_PASSWORD, password.c_str());
     curl_easy_setopt(curl, CURLOPT_URL, SMTP);
@@ -182,12 +182,12 @@ CURLcode downloadCNB() {
 }
 
 bool isPokus(int& param) {
-	if (param > 3) {
-		return true;
-	}
-	else {
-		return false;
-	}
+    if (param > 3) {
+        return true;
+    }
+    else {
+        return false;
+    }
 }
 
 json get_user_info(const string& email, json& data) {
@@ -207,7 +207,7 @@ json get_user_info(const string& email, json& data) {
     return json{};
 }
 
-json get_user_account( std::string email, json& data, std::string account_number) {
+json get_user_account(std::string email, json& data, std::string account_number) {
     // Loop through each object in the JSON array
     for (auto& user : data) {
         // Check if the email matches
@@ -311,13 +311,13 @@ double findCurrency(const string& code, const std::vector<Currency*>& kurz) {
     return 0;
 }
 
-double findRate(vector<Currency*>& kurz, string& currencyTo, string& currencyFrom) {
+double findRate(vector<Currency*>& kurz, string currencyTo, string currencyFrom) {
     double currTo = findCurrency(currencyTo, kurz);
     double currFrom = findCurrency(currencyFrom, kurz);
     return currTo / currFrom;
 }
 
-double findCZRate(vector<Currency*>& kurz, string& currencyTo, string& currencyFrom) {
+double findCZRate(vector<Currency*>& kurz, string currencyTo, string currencyFrom) {
     if (currencyTo == "CZK") {
         for (auto currency : kurz) {
             if (currency->getCode() == currencyFrom) {
@@ -341,7 +341,7 @@ int generateRandomNumber() {
     return random_number;
 }
 
-void updateUserData(string& email, string& customer_account, string& transfer_amount) {
+void updateUserData(string& email, string customer_account, string transfer_amount) {
     ifstream ifs(DATAJ);
     json data_json;
     ifs >> data_json;
@@ -386,4 +386,27 @@ void updateTransactions(string& email, json& transaction) {
     }
     std::ofstream ofs(TRANSJ);
     ofs << data_json.dump(4) << std::endl;
+}
+
+string ourBank(json& data, json& transfer) {
+    string accountNumber = transfer["accountNumber"];
+    for (const auto& user : data) {
+        for (const auto& account : user["accounts"]) {
+            if (account["account_number"] == accountNumber) {
+                return user["email"];
+            }
+        }
+    }
+    return "";
+}
+void switchAccountVariables(json& transfer) {
+    // Get the values of accountFrom and accountNumber
+    string accountFrom = transfer["accountFrom"];
+    string accountNumber = transfer["accountNumber"];
+    string amount = transfer["amount"];
+
+    // Switch the values
+    transfer["accountFrom"] = accountNumber;
+    transfer["accountNumber"] = accountFrom;
+    transfer["amount"] = to_string(stod(amount) * -1);
 }
