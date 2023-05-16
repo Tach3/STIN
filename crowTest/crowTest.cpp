@@ -443,5 +443,52 @@ namespace crowTest
             Assert::AreEqual(size_t(31), kurz.size());
         }
 
+        TEST_METHOD(TestSwitchAccountVariables)
+        {
+            // Arrange
+            json transfer = R"({
+                "accountFrom": "22222222",
+                "accountNumber": "54806491",
+                "amount": "500",
+                "currency": "EUR"
+            })"_json;
+
+            // Act
+            switchAccountVariables(transfer);
+
+            // Assert
+            Assert::AreEqual("54806491", transfer["accountFrom"].get<std::string>().c_str());
+            Assert::AreEqual("22222222", transfer["accountNumber"].get<std::string>().c_str());
+            Assert::AreEqual(to_string(stod("-500")), transfer["amount"].get<std::string>());
+        }
+
+        TEST_METHOD(TestGetUserCurrencies_UserFound)
+        {
+            // Arrange
+            json data = R"([
+                {
+                    "email": "peter.spurny@tul.cz",
+                    "code": "CZK",
+                    "currencies": ["CZK", "EUR", "USD"]
+                },
+                {
+                    "email": "john.doe@example.com",
+                    "code": "USD",
+                    "currencies": ["USD", "EUR"]
+                }
+            ])"_json;
+
+            std::string email = "peter.spurny@tul.cz";
+            std::string code = "CZK";
+
+            // Act
+            json result = getUserCurrencies(email, data, code);
+
+            // Assert
+            Assert::AreEqual("CZK", result[0].get<std::string>().c_str());
+            Assert::AreEqual("EUR", result[1].get<std::string>().c_str());
+            Assert::AreEqual("USD", result[2].get<std::string>().c_str());
+        }
+
 	};
 }

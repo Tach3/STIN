@@ -90,6 +90,21 @@
                     "account_number": "22222223",
                     "transactions": [
                         {
+                            "account": "11111111",
+                            "amount": "-0.461446",
+                            "date": "Tue May 16 14:55:05 2023\n"
+                        },
+                        {
+                            "account": "11111111",
+                            "amount": "-10.000000",
+                            "date": "Tue May 16 14:52:39 2023\n"
+                        },
+                        {
+                            "account": "11111111",
+                            "amount": "-10.000000",
+                            "date": "Tue May 16 14:50:28 2023\n"
+                        },
+                        {
                             "account": "22222223",
                             "amount": "0.969037",
                             "date": "Mon May 15 17:22:59 2023\n"
