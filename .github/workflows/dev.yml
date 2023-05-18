@@ -59,6 +59,7 @@ jobs:
       with:
         reports: D:\a\STIN\STIN\crow\TestResults\**\testResult.cobertura.xml
         targetdir: coveragereport
+        reporttypes: Html;Badges
         
     - uses: actions/upload-artifact@v2
       with:
