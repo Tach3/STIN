@@ -69,9 +69,8 @@ jobs:
       uses: codecov/codecov-action@v3
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        directory: D:\a\STIN\STIN\crow\TestResults\**\
         fail_ci_if_error: true
-        files: ./testResult.cobertura.xml
+        files: D:\a\STIN\STIN\crow\TestResults\**\testResult.cobertura.xml
         flags: unittests
         name: codecov-umbrella
         verbose: true
