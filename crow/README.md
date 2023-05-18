@@ -1,2 +1,2 @@
 # crow
-![example workflow](https://github.com/Tach3/STIN/actions/workflows/dev.yml/badge_combined.svg)
+[![build and test crow dev](https://github.com/Tach3/STIN/actions/workflows/dev.yml/badge.svg?branch=dev)](https://github.com/Tach3/STIN/actions/workflows/dev.yml)
