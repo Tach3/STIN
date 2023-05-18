@@ -64,3 +64,14 @@ jobs:
       with:
         name: code-coverage-report
         path: coveragereport
+
+    - name: Upload coverage reports to Codecov
+      uses: codecov/codecov-action@v3
+        with:
+        token: ${{ secrets.CODECOV_TOKEN }}
+        directory: D:\a\STIN\STIN\crow\TestResults\**\
+        fail_ci_if_error: true
+        files: ./testResult.cobertura.xml
+        flags: unittests
+        name: codecov-umbrella
+        verbose: true
