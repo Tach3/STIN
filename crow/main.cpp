@@ -104,6 +104,9 @@ int main()
         json data = parseJson(DATAJ);
         json customer = get_user_account(email, data, transfer["accountFrom"]); //{"account_1":{"Currency":"CZK","account_number":"22222222","funds":"1989"},"account_2":{"Currency":"USD","account_number":"22222223","funds":"1500"}}
         string amount = transfer["amount"];
+        if (stod(amount) <= 0) {
+            return crow::response(404);
+        }
         string funds = customer["funds"];
         if (transfer["currency"] == customer["Currency"]) {//currency sedi
             if (stoi(amount) < stoi(funds)) {
@@ -169,6 +172,9 @@ int main()
         json data = parseJson(DATAJ);
         json customer = get_user_account(email, data, deposit["accountFrom"]);
         string amount = deposit["amount"];
+        if (stod(amount) <= 0) {
+            return crow::response(404);
+        }
         if (deposit["currency"] == customer["Currency"]) {
             amount = to_string(stod(amount) * -1);
             deposit["amount"] = amount;
