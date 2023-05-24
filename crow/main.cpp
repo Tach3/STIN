@@ -108,9 +108,11 @@ int main()
             return crow::response(404);
         }
         string funds = customer["funds"];
+        if(stod(funds) < 0) {
+            return crow::response(404);
+        }
         if (transfer["currency"] == customer["Currency"]) {//currency sedi
-            if (stoi(amount) < stoi(funds)) {
-                //todo edit dataj, edit transactions
+            if (stoi(amount) < (stoi(funds) + stoi(funds)*0.1)) {
                 updateUserData(email, customer["account_number"], transfer["amount"]);
                 updateTransactions(email, transfer);
             }
@@ -127,7 +129,7 @@ int main()
                 c_rate = findRate(kurz, transfer["currency"], customer["Currency"]);
             }
             double transferAmount = stoi(amount) * c_rate;
-            if (transferAmount < stoi(funds)) {
+            if (transferAmount < (stoi(funds) + stoi(funds) * 0.1)) {
                 transfer["amount"] = to_string(transferAmount);
                 updateUserData(email, customer["account_number"], transfer["amount"]);
                 updateTransactions(email, transfer);         
@@ -161,6 +163,7 @@ int main()
             }
 
         }
+        checkNegative(email, customer["account_number"]);
         return crow::response(200);
             });
     CROW_ROUTE(app, "/deposit")
