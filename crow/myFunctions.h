@@ -359,6 +359,26 @@ void updateUserData(string& email, string customer_account, string transfer_amou
     ofs << data_json.dump(4) << endl;
 }
 
+void checkNegative(string& email, string customer_account) {
+    ifstream ifs(DATAJ);
+    json data_json;
+    ifs >> data_json;
+    for (auto& user : data_json) {
+        if (user["email"] == email) {
+            for (auto& account : user["accounts"]) {
+                if (account["account_number"] == customer_account) {
+                    string funds = account["funds"];
+                    if (stod(funds) < 0) {
+                        account["funds"] = to_string(stod(funds) * 1.10);
+                    }
+                }
+            }
+        }
+    }
+    ofstream ofs(DATAJ);
+    ofs << data_json.dump(4) << endl;
+}
+
 void updateTransactions(string& email, json& transaction) {
     ifstream ifs(TRANSJ);
     json data_json;

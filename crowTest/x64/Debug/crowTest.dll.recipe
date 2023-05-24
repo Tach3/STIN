@@ -2,10 +2,10 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>C:\Users\peter\source\repos\ravenBanking\crow\x64\Debug\crow.exe</FullPath>
+      <FullPath>C:\Users\peter\source\repos\Tach3\STIN\crow\x64\Debug\crow.exe</FullPath>
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>C:\Users\peter\source\repos\ravenBanking\crow\x64\Debug\crowTest.dll</FullPath>
+      <FullPath>C:\Users\peter\source\repos\Tach3\STIN\crow\x64\Debug\crowTest.dll</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />

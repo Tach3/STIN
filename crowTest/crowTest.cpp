@@ -490,5 +490,87 @@ namespace crowTest
             Assert::AreEqual("USD", result[2].get<std::string>().c_str());
         }
 
+        TEST_METHOD(TestAccountNumberExists)
+        {
+            // Arrange
+            json data = R"(
+                [
+                    {
+                        "email": "example1@example.com",
+                        "accounts": [
+                            {
+                                "account_number": "123456789",
+                                "funds": "1000"
+                            }
+                        ]
+                    },
+                    {
+                        "email": "example2@example.com",
+                        "accounts": [
+                            {
+                                "account_number": "987654321",
+                                "funds": "500"
+                            }
+                        ]
+                    }
+                ]
+            )"_json;
+
+            json transfer = R"(
+                {
+                    "accountNumber": "123456789"
+                }
+            )"_json;
+
+            std::string expectedEmail = "example1@example.com";
+
+            // Act
+            std::string resultEmail = ourBank(data, transfer);
+
+            // Assert
+            Assert::AreEqual(expectedEmail, resultEmail);
+        }
+
+        TEST_METHOD(TestAccountNumberDoesNotExist)
+        {
+            // Arrange
+            json data = R"(
+                [
+                    {
+                        "email": "example1@example.com",
+                        "accounts": [
+                            {
+                                "account_number": "123456789",
+                                "funds": "1000"
+                            }
+                        ]
+                    },
+                    {
+                        "email": "example2@example.com",
+                        "accounts": [
+                            {
+                                "account_number": "987654321",
+                                "funds": "500"
+                            }
+                        ]
+                    }
+                ]
+            )"_json;
+
+            json transfer = R"(
+                {
+                    "accountNumber": "555555555"
+                }
+            )"_json;
+
+            std::string expectedEmail = "";
+
+            // Act
+            std::string resultEmail = ourBank(data, transfer);
+
+            // Assert
+            Assert::AreEqual(expectedEmail, resultEmail);
+        }
+
 	};
 }
